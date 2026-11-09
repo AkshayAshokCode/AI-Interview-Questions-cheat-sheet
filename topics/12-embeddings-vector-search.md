@@ -175,6 +175,18 @@ A common path: prompt an LLM to bootstrap labels → train an embeddings-based o
 
 </details>
 
+### 16. What are sparse learned embeddings (SPLADE) and late-interaction models (ColBERT)?
+
+<details>
+<summary>Answer</summary>
+
+- **Sparse learned embeddings (SPLADE)** – a transformer predicts weights over the **vocabulary** for each text (including related terms not literally present), giving sparse vectors that work with inverted indexes like BM25 but capture some semantics and expansion. Interpretable and efficient for keyword-style search.
+- **Late interaction (ColBERT)** – keep **one embedding per token** instead of one per document; score with "MaxSim" (each query token matches its best document token, summed). More accurate than single-vector bi-encoders, cheaper than cross-encoders, but needs much more storage (mitigated with compression).
+
+They sit between BM25, dense bi-encoders and cross-encoder rerankers in the accuracy/cost spectrum and are used in high-quality retrieval pipelines.
+
+</details>
+
 ---
 
 [⬅ Previous: Prompt Engineering](11-prompt-engineering.md) · [⬅ Back to index](../README.md) · [Next: Retrieval-Augmented Generation (RAG) ➡](13-rag.md)

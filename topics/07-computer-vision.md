@@ -169,6 +169,34 @@ It mixes information **across channels** at each pixel without looking at neighb
 
 </details>
 
+### 14. What is self-supervised learning in vision (SimCLR, MAE, DINO)?
+
+<details>
+<summary>Answer</summary>
+
+Learning visual representations from **unlabelled images** by creating a training signal from the data itself:
+- **Contrastive (SimCLR, MoCo)** – two augmented views of the same image should have similar embeddings; views of different images dissimilar.
+- **Masked image modelling (MAE)** – hide most image patches and train a ViT to reconstruct them.
+- **Self-distillation (DINO / DINOv2)** – a student network matches a teacher's outputs on different views, with no negatives needed.
+- **Image–text contrastive (CLIP)** – uses captions as weak supervision.
+
+These backbones transfer well to downstream tasks with few labels and power image search and multimodal models.
+
+</details>
+
+### 15. How do face recognition and image similarity systems work (metric learning)?
+
+<details>
+<summary>Answer</summary>
+
+Train a network to produce **embeddings** where images of the same identity/product are close and different ones are far apart:
+- **Triplet loss** – for (anchor, positive, negative), make `d(a, p) + margin < d(a, n)`; needs good hard-negative mining.
+- **Margin-based softmax losses** (ArcFace, CosFace) – classification over identities with an angular margin; the standard for face recognition.
+
+At inference, compute the embedding and compare: **verification** (is this the same person? distance below a threshold) or **identification** (nearest neighbour search over a gallery with an ANN index). Concerns: bias across demographics, spoofing (liveness detection), privacy and consent, and threshold choice (false accept vs false reject rates).
+
+</details>
+
 ---
 
 [⬅ Previous: Neural Network Fundamentals](06-neural-networks.md) · [⬅ Back to index](../README.md) · [Next: NLP & Sequence Models ➡](08-nlp-sequence-models.md)

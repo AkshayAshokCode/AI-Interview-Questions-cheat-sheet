@@ -256,6 +256,66 @@ Averaged over all possible problems, no learning algorithm beats any other. The 
 
 </details>
 
+### 21. How do you handle outliers?
+
+<details>
+<summary>Answer</summary>
+
+First decide whether they're **errors** (sensor glitches, unit mistakes → fix or remove) or **real but rare** values (big transactions → keep; they may be the most important cases).
+- Detect: z-scores, IQR rule, isolation forest, domain rules, visualisation.
+- Handle: cap/winsorise extreme values, log-transform skewed features, use robust models and losses (tree models, Huber/MAE loss, median instead of mean), or model them separately.
+- Never remove outliers from the test set just to improve metrics – production will contain them.
+
+</details>
+
+### 22. What feature selection methods do you know?
+
+<details>
+<summary>Answer</summary>
+
+- **Filter methods** – rank features by statistics independent of the model: correlation, mutual information, chi-squared, variance threshold. Fast, may miss interactions.
+- **Wrapper methods** – evaluate subsets with the model: forward selection, backward elimination, recursive feature elimination. Accurate but expensive.
+- **Embedded methods** – selection happens during training: L1 (lasso) zeroing weights, tree-based feature importance.
+- **Permutation importance / SHAP** – measure how much performance drops when a feature is shuffled.
+
+Reasons to select features: less overfitting, faster training and serving, easier explanation, and fewer data dependencies to maintain. Do selection inside cross-validation to avoid leakage.
+
+</details>
+
+### 23. How do you deal with noisy labels?
+
+<details>
+<summary>Answer</summary>
+
+- **Measure** label quality: have several annotators label a sample and compute agreement (Cohen's/Fleiss' kappa); review disagreements.
+- **Clean** – find likely mislabelled examples (high loss on held-out folds, confident-learning methods) and relabel them.
+- **Improve guidelines** and annotator training; use gold questions to monitor annotators.
+- **Robust training** – label smoothing, robust losses, early stopping (models memorise noise late in training), down-weighting low-agreement examples.
+- Make sure the **test set** is especially clean – noisy test labels make all evaluation misleading.
+
+</details>
+
+### 24. What is active learning?
+
+<details>
+<summary>Answer</summary>
+
+When labelling is expensive, let the model choose **which examples to label next**: train on a small labelled set, then ask annotators to label the examples the model is most **uncertain** about (lowest confidence, highest entropy, disagreement within an ensemble) or the most **diverse/representative** ones, retrain, and repeat. It reaches a target accuracy with far fewer labels than random sampling. Watch out for sampling bias (the labelled set no longer matches the real distribution – keep a random test set).
+
+</details>
+
+### 25. Multi-class vs multi-label classification?
+
+<details>
+<summary>Answer</summary>
+
+- **Multi-class** – each example has exactly **one** of K classes: a softmax output with categorical cross-entropy; prediction = argmax.
+- **Multi-label** – each example can have **several** labels (a photo with "beach", "dog", "sunset"): K independent sigmoid outputs with binary cross-entropy per label; a threshold per label (tuned separately).
+
+Metrics also differ: multi-label uses per-label precision/recall, micro/macro F1, Hamming loss, or subset accuracy.
+
+</details>
+
 ---
 
 [⬅ Previous: Math & Statistics for ML](02-math-statistics.md) · [⬅ Back to index](../README.md) · [Next: Classical ML Algorithms ➡](04-classical-algorithms.md)

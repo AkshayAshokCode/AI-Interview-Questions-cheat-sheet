@@ -1,6 +1,6 @@
 # AI Interview Questions – Cheat Sheet
 
-A revision guide for AI/ML and GenAI interviews: **360 questions with interview-ready answers**, split into 24 topics. It covers ML fundamentals, deep learning, transformers, LLMs, prompting, RAG, fine-tuning, agents and MCP, evaluation, inference and serving, MLOps, ML/GenAI system design, responsible AI, from-scratch ML coding, scenario questions, and what AI labs, big tech and Indian companies ask.
+A revision guide for AI/ML and GenAI interviews: **400 questions with interview-ready answers**, split into 24 topics. It covers ML fundamentals, deep learning, transformers, LLMs, prompting, RAG, fine-tuning, agents and MCP, evaluation, inference and serving, MLOps, ML/GenAI system design, responsible AI, from-scratch ML coding, scenario questions, and what AI labs, big tech and Indian companies ask.
 
 Every answer is hidden in a collapsible block, so you can **test yourself first** and then click to check.
 
@@ -30,53 +30,53 @@ Also see: **[Android](https://github.com/AkshayAshokCode/Android-Interview-Quest
 | # | Topic | Questions | Key areas |
 |---|---|---|---|
 | 01 | [AI Interviews: Roles & Rounds](topics/01-ai-interviews-overview.md) | 10 | ML vs AI/LLM engineer vs data scientist, interview rounds, project deep dives, preparation plan |
-| 02 | [Math & Statistics for ML](topics/02-math-statistics.md) | 19 | Dot products, eigenvectors, SVD, gradients, Bayes, MLE vs MAP, A/B tests, entropy and KL divergence |
+| 02 | [Math & Statistics for ML](topics/02-math-statistics.md) | 24 | Dot products, eigenvectors, SVD, gradients, Bayes, MLE vs MAP, A/B tests, entropy and KL divergence |
 
 ### 📊 Classic Machine Learning
 
 | # | Topic | Questions | Key areas |
 |---|---|---|---|
-| 03 | [ML Fundamentals](topics/03-ml-fundamentals.md) | 20 | Bias-variance, overfitting, L1 vs L2, cross-validation, data leakage, imbalance, drift |
-| 04 | [Classical ML Algorithms](topics/04-classical-algorithms.md) | 16 | Linear/logistic regression, trees, random forests, gradient boosting, SVM, k-means, PCA |
+| 03 | [ML Fundamentals](topics/03-ml-fundamentals.md) | 25 | Bias-variance, overfitting, L1 vs L2, cross-validation, data leakage, imbalance, drift |
+| 04 | [Classical ML Algorithms](topics/04-classical-algorithms.md) | 20 | Linear/logistic regression, trees, random forests, gradient boosting, SVM, k-means, PCA, GMM/EM, reinforcement learning, bandits |
 | 05 | [Evaluation Metrics](topics/05-evaluation-metrics.md) | 14 | Precision/recall/F1, ROC-AUC vs PR-AUC, calibration, NDCG/MRR, offline vs online metrics |
 
 ### 🧠 Deep Learning
 
 | # | Topic | Questions | Key areas |
 |---|---|---|---|
-| 06 | [Neural Network Fundamentals](topics/06-neural-networks.md) | 18 | Backprop, activations, Adam/AdamW, normalisation, dropout, residuals, debugging training |
-| 07 | [Computer Vision](topics/07-computer-vision.md) | 13 | CNNs, ResNet, ViT, detection (YOLO, DETR), segmentation, CLIP, vision-language models |
-| 08 | [NLP & Sequence Models](topics/08-nlp-sequence-models.md) | 12 | TF-IDF, word2vec, BPE tokenisation, LSTMs, attention origins, BERT vs GPT |
-| 09 | [Transformers Deep Dive](topics/09-transformers.md) | 16 | Self-attention, √d_k, multi-head, RoPE, KV cache, FlashAttention, GQA, mixture of experts |
+| 06 | [Neural Network Fundamentals](topics/06-neural-networks.md) | 21 | Backprop, activations, Adam/AdamW, normalisation, dropout, residuals, debugging training |
+| 07 | [Computer Vision](topics/07-computer-vision.md) | 15 | CNNs, ResNet, ViT, detection (YOLO, DETR), segmentation, CLIP, vision-language models |
+| 08 | [NLP & Sequence Models](topics/08-nlp-sequence-models.md) | 13 | TF-IDF, word2vec, BPE tokenisation, LSTMs, attention origins, BERT vs GPT |
+| 09 | [Transformers Deep Dive](topics/09-transformers.md) | 17 | Self-attention, √d_k, multi-head, RoPE, KV cache, FlashAttention, GQA, mixture of experts |
 
 ### 🤖 LLMs & Generative AI
 
 | # | Topic | Questions | Key areas |
 |---|---|---|---|
-| 10 | [LLM Fundamentals](topics/10-llm-fundamentals.md) | 18 | Training pipeline, scaling laws, decoding, hallucinations, reasoning models, open vs closed |
+| 10 | [LLM Fundamentals](topics/10-llm-fundamentals.md) | 21 | Training pipeline, scaling laws, decoding, hallucinations, reasoning models, open vs closed |
 | 11 | [Prompt Engineering](topics/11-prompt-engineering.md) | 15 | Few-shot, chain-of-thought, structured output, context engineering, caching, prompt injection |
-| 12 | [Embeddings & Vector Search](topics/12-embeddings-vector-search.md) | 15 | Embedding models, HNSW, IVF-PQ, vector databases, hybrid search, rerankers |
+| 12 | [Embeddings & Vector Search](topics/12-embeddings-vector-search.md) | 16 | Embedding models, HNSW, IVF-PQ, vector databases, hybrid search, rerankers |
 | 13 | [Retrieval-Augmented Generation (RAG)](topics/13-rag.md) | 15 | Pipeline, chunking, retrieval quality, citations, permissions, evaluation, GraphRAG, RAG vs fine-tuning |
-| 14 | [Fine-Tuning & Alignment](topics/14-fine-tuning-alignment.md) | 15 | When to fine-tune, LoRA/QLoRA, SFT data, RLHF, DPO, RL with verifiable rewards, distillation |
+| 14 | [Fine-Tuning & Alignment](topics/14-fine-tuning-alignment.md) | 17 | When to fine-tune, LoRA/QLoRA, SFT data, RLHF, DPO, RL with verifiable rewards, distillation |
 | 15 | [Agents, Tool Use & MCP](topics/15-agents-tool-use.md) | 15 | Tool calling, ReAct, planning, memory, multi-agent, MCP, computer use, agent security |
 | 16 | [LLM Evaluation](topics/16-llm-evaluation.md) | 14 | Eval sets, LLM-as-judge, benchmarks and contamination, RAG/agent evals, CI, production monitoring |
-| 17 | [LLM Inference, Serving & Optimisation](topics/17-llm-inference-serving.md) | 16 | TTFT, GPU memory maths, quantisation, PagedAttention, batching, speculative decoding, cost |
+| 17 | [LLM Inference, Serving & Optimisation](topics/17-llm-inference-serving.md) | 18 | TTFT, GPU memory maths, quantisation, PagedAttention, batching, speculative decoding, cost |
 | 18 | [Generative Models](topics/18-generative-models.md) | 11 | VAEs, GANs, diffusion, latent diffusion, guidance, ControlNet/LoRA, evaluation |
 
 ### ⚙️ Production & Design
 
 | # | Topic | Questions | Key areas |
 |---|---|---|---|
-| 19 | [MLOps & Production ML](topics/19-mlops-production.md) | 15 | Feature stores, training-serving skew, deployment, monitoring, drift, distributed training, LLMOps |
-| 20 | [ML & GenAI System Design](topics/20-ml-genai-system-design.md) | 14 | Recommendations, search ranking, ads CTR, fraud, moderation, RAG assistant, ChatGPT, coding assistant |
+| 19 | [MLOps & Production ML](topics/19-mlops-production.md) | 17 | Feature stores, training-serving skew, deployment, monitoring, drift, distributed training, LLMOps |
+| 20 | [ML & GenAI System Design](topics/20-ml-genai-system-design.md) | 18 | Recommendations, search ranking, ads CTR, fraud, moderation, RAG assistant, ChatGPT, coding assistant, ETA prediction, visual search, voice |
 | 21 | [Responsible AI, Safety & Security](topics/21-responsible-ai-safety.md) | 14 | Bias and fairness, SHAP, privacy, OWASP LLM Top 10, guardrails, red-teaming, EU AI Act |
 
 ### ⭐ Interview Rounds
 
 | # | Topic | Questions | Key areas |
 |---|---|---|---|
-| 22 | [ML Coding (Implement From Scratch)](topics/22-ml-coding.md) | 14 | Linear/logistic regression, k-means, k-NN, softmax, metrics, attention, training loop, BPE, sampling |
-| 23 | [Scenario-Based Questions](topics/23-scenario-based.md) | 17 | Accuracy drop, leakage, imbalance, hallucinating chatbot, bad retrieval, slow/expensive LLM features |
+| 22 | [ML Coding (Implement From Scratch)](topics/22-ml-coding.md) | 17 | Linear/logistic regression, k-means, k-NN, softmax, metrics, attention, training loop, BPE, sampling |
+| 23 | [Scenario-Based Questions](topics/23-scenario-based.md) | 19 | Accuracy drop, leakage, imbalance, hallucinating chatbot, bad retrieval, slow/expensive LLM features |
 | 24 | [Company-Wise Questions & What's New](topics/24-company-wise-whats-new.md) | 14 | AI labs, Google, Meta, Amazon, Microsoft, Apple, Nvidia, startups, Indian companies; latest trends |
 
 ---

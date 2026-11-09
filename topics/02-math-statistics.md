@@ -233,6 +233,62 @@ Correlation can come from confounders (ice cream sales and drownings both rise i
 
 </details>
 
+### 20. What is bootstrapping, and when do you use it?
+
+<details>
+<summary>Answer</summary>
+
+**Bootstrapping** estimates the uncertainty of a statistic by **resampling the data with replacement** many times (e.g. 1,000), computing the statistic on each resample, and looking at the spread. The 2.5th–97.5th percentiles give a 95% confidence interval. Uses: confidence intervals for model metrics (AUC, F1) on a test set, comparing two models on the same test set (paired bootstrap), and statistics without a simple formula (medians, ratios). It's also the "bootstrap" in bagging / random forests.
+
+</details>
+
+### 21. Bayesian vs frequentist statistics – what's the difference?
+
+<details>
+<summary>Answer</summary>
+
+- **Frequentist** – parameters are fixed but unknown; probability describes long-run frequencies of data. Tools: p-values, confidence intervals, MLE.
+- **Bayesian** – parameters are uncertain quantities with probability distributions; start with a **prior**, update with data to a **posterior**. Tools: posterior distributions, credible intervals, MAP.
+
+Practical differences: Bayesian methods incorporate prior knowledge, give intuitive statements ("94% probability variant B is better"), and handle small data and sequential updating well (Bayesian A/B testing, Thompson sampling); frequentist methods are standard, simpler and need no prior choice.
+
+</details>
+
+### 22. What is the multiple comparisons problem?
+
+<details>
+<summary>Answer</summary>
+
+Testing many hypotheses at α = 0.05 means about 5% of true nulls will look "significant" by chance – with 20 metrics, you expect one false positive. Corrections:
+- **Bonferroni** – use α/m for m tests (simple, conservative).
+- **Holm** – a step-down version, less conservative.
+- **Benjamini–Hochberg** – controls the **false discovery rate** (expected share of false positives among discoveries); good when testing many things (feature screening, many segments).
+
+In A/B testing: pick one primary metric in advance, treat the rest as guardrails or exploratory, and be careful with segment-hunting after the fact.
+
+</details>
+
+### 23. What is Simpson's paradox?
+
+<details>
+<summary>Answer</summary>
+
+A trend that appears in every subgroup can **reverse** when the groups are combined, because of a confounding variable that changes group sizes. Example: a new model has a higher conversion rate on both mobile and desktop, but a lower overall rate, because it received a much larger share of mobile traffic, which converts less overall. Lesson: check results by segment, understand how traffic was allocated, and think about confounders before drawing conclusions.
+
+</details>
+
+### 24. What are the Jacobian and the Hessian, and where do they appear in ML?
+
+<details>
+<summary>Answer</summary>
+
+- The **Jacobian** is the matrix of first derivatives of a vector-valued function (each output with respect to each input). Backpropagation is effectively multiplying Jacobians (as vector–Jacobian products) layer by layer.
+- The **Hessian** is the matrix of second derivatives of a scalar loss: it describes the **curvature** of the loss surface. Positive definite at a point → local minimum; mixed signs → saddle point.
+
+Second-order methods (Newton's method) use the Hessian to take better steps but are too expensive for large networks (n² entries), so deep learning uses first-order methods (SGD, Adam), which approximate curvature cheaply with per-parameter scaling.
+
+</details>
+
 ---
 
 [⬅ Previous: AI Interviews: Roles & Rounds](01-ai-interviews-overview.md) · [⬅ Back to index](../README.md) · [Next: ML Fundamentals ➡](03-ml-fundamentals.md)

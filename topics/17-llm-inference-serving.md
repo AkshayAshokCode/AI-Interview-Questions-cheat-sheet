@@ -202,6 +202,32 @@ Example: a 16 GB (BF16 8B) model on a GPU with ~3 TB/s bandwidth has a theoretic
 
 </details>
 
+### 17. What are pruning and other model compression techniques besides quantisation?
+
+<details>
+<summary>Answer</summary>
+
+- **Pruning** – remove weights or structures that contribute little. **Unstructured** pruning zeroes individual weights (high sparsity but needs sparse kernels to speed up); **structured** pruning removes whole neurons, attention heads, channels or layers (real speedups on normal hardware, more accuracy loss). Usually followed by fine-tuning to recover accuracy.
+- **Knowledge distillation** – train a smaller student to mimic a larger model.
+- **Low-rank factorisation** – replace big weight matrices with products of smaller ones.
+- **Efficient architectures** – MoE, GQA, smaller vocabularies.
+
+Combine techniques (e.g. distil → prune → quantise) and always measure accuracy and real latency on the target hardware.
+
+</details>
+
+### 18. How do you load-test an LLM endpoint?
+
+<details>
+<summary>Answer</summary>
+
+- Generate **realistic traffic**: a distribution of prompt and output lengths from production logs (latency depends heavily on both), realistic concurrency and arrival patterns.
+- Measure TTFT, inter-token latency and end-to-end latency at p50/p95/p99, throughput (tokens/s), error and rate-limit rates, and GPU utilisation/memory.
+- Increase load until latency SLOs break to find the **maximum sustainable concurrency** per GPU/replica; that drives capacity planning and autoscaling thresholds.
+- Test long-context and burst scenarios separately, and include cache effects (prefix caching makes repeated prompts look faster than reality).
+
+</details>
+
 ---
 
 [⬅ Previous: LLM Evaluation](16-llm-evaluation.md) · [⬅ Back to index](../README.md) · [Next: Generative Models ➡](18-generative-models.md)

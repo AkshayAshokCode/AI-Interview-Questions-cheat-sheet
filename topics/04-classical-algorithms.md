@@ -195,6 +195,65 @@ Both reduce variance by averaging many models. **Bagging** explicitly trains sep
 
 </details>
 
+## Probabilistic Models & Reinforcement Learning
+
+### 17. What are Gaussian mixture models and the EM algorithm?
+
+<details>
+<summary>Answer</summary>
+
+A **Gaussian mixture model** assumes data comes from K Gaussian distributions, each with its own mean, covariance and weight. Unlike k-means, it gives **soft assignments** (probabilities of belonging to each cluster) and handles elliptical clusters of different sizes.
+
+It's fitted with **Expectation-Maximisation**:
+- **E-step** – compute each point's probability of belonging to each component, given current parameters.
+- **M-step** – re-estimate means, covariances and weights using those probabilities.
+- Repeat until the log-likelihood stops improving (converges to a local optimum; k-means is a special "hard" case).
+
+EM is a general method for models with hidden (latent) variables.
+
+</details>
+
+### 18. What are the basics of reinforcement learning (MDPs, rewards, policies)?
+
+<details>
+<summary>Answer</summary>
+
+An **agent** interacts with an **environment**: in state s it takes action a, receives reward r and moves to state s'. This is formalised as a **Markov decision process** (states, actions, transition probabilities, rewards, discount factor γ).
+- A **policy** π(a|s) chooses actions; the goal is to maximise expected **discounted return** Σ γᵗ rₜ.
+- **Value function** V(s) – expected return from a state; **Q-function** Q(s, a) – expected return from taking action a in state s.
+- Key challenges: **exploration vs exploitation**, delayed rewards (credit assignment), and sample efficiency.
+
+Applications: games, robotics, recommendations and ads (bandits), resource allocation, and **RLHF / RL with verifiable rewards** for LLMs.
+
+</details>
+
+### 19. Q-learning vs policy gradient methods (and where PPO fits)?
+
+<details>
+<summary>Answer</summary>
+
+- **Value-based (Q-learning, DQN)** – learn Q(s, a) with the Bellman update `Q(s,a) ← Q(s,a) + α [r + γ maxₐ' Q(s',a') − Q(s,a)]`, then act greedily (with some exploration). DQN uses a neural network, experience replay and a target network. Suits discrete actions.
+- **Policy gradient (REINFORCE)** – directly adjust policy parameters to increase the probability of actions that led to high returns; works with continuous actions and stochastic policies, but has high variance.
+- **Actor-critic** – a policy (actor) plus a value estimate (critic) that reduces variance by using **advantages** (how much better an action was than expected).
+- **PPO** – an actor-critic method that **clips** how far each update can move the policy, making training stable; it was the standard algorithm for RLHF. **GRPO** removes the critic by comparing several sampled responses to the same prompt.
+
+</details>
+
+### 20. What are multi-armed bandits, and where are they used?
+
+<details>
+<summary>Answer</summary>
+
+A simplified RL problem: repeatedly choose one of several options ("arms") with unknown reward rates to maximise total reward – balancing **exploration** (try uncertain arms) and **exploitation** (use the best known arm).
+- **ε-greedy** – explore randomly with probability ε.
+- **UCB** – pick the arm with the highest upper confidence bound (optimism under uncertainty).
+- **Thompson sampling** – sample a plausible reward rate for each arm from its posterior (e.g. Beta distribution) and pick the best sample; simple and very effective.
+- **Contextual bandits** – choose based on user/context features (LinUCB, neural bandits).
+
+Uses: headline and thumbnail testing, recommendations for new items (cold start), ad selection, dynamic pricing, notification timing. Compared with A/B tests, bandits shift traffic to winners during the experiment (less regret) but make clean statistical inference harder.
+
+</details>
+
 ---
 
 [⬅ Previous: ML Fundamentals](03-ml-fundamentals.md) · [⬅ Back to index](../README.md) · [Next: Evaluation Metrics ➡](05-evaluation-metrics.md)

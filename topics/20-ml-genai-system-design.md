@@ -231,6 +231,69 @@ A common pattern: use an LLM to prototype and to **label data**, then train a sm
 
 </details>
 
+### 15. Design an ETA prediction system (food delivery / ride-hailing).
+
+<details>
+<summary>Answer</summary>
+
+**Goal** – predict delivery/arrival time accurately and honestly at order time and keep updating it. Metrics: MAE, the share of orders arriving within the promised window, and **calibration** of the promised time (late deliveries hurt more than early ones – consider an asymmetric loss or predicting a quantile like p80).
+
+**Decompose** the ETA: order confirmation → **food preparation time** (restaurant, items, current load) → courier assignment and travel to restaurant → waiting → travel to customer (route, traffic, weather) → hand-off (apartment, parking).
+
+**Features** – restaurant historical prep times and current queue, time of day/day of week, weather, live traffic and road speeds, courier location and supply/demand in the area, distance and route, customer building type.
+
+**Model** – gradient-boosted trees or deep models per component or end to end; graph features from road networks; retrained frequently.
+
+**Serving** – predicted at checkout (tens of ms), recomputed on each status update; streaming features from Kafka/Flink; fallback to heuristic estimates if the model is unavailable.
+
+**Monitoring** – error by city, restaurant and time; drift during rain or festivals; feedback loop (a promised time influences behaviour).
+
+</details>
+
+### 16. Design a visual search system ("search by photo").
+
+<details>
+<summary>Answer</summary>
+
+- **Offline** – compute image embeddings for the whole catalogue with a vision model (fine-tuned on product images with metric learning, or CLIP-like models); detect and crop main objects; store embeddings in an ANN index with metadata (category, price, availability).
+- **Query** – the user uploads or snaps a photo → object detection (let the user pick an item if several) → embedding → ANN search → filter (in stock, region) → rerank (visual similarity + popularity + text attributes) → results.
+- **Multimodal refinement** – "like this but in red": combine image and text embeddings in a shared space.
+- **Evaluation** – recall@k on labelled query–product pairs, click-through and conversion online.
+- **Scale** – millions to billions of images: quantised ANN indexes, sharding, GPU embedding pipelines, incremental indexing of new products.
+
+</details>
+
+### 17. Design an LLM-based document extraction pipeline (invoices, forms, KYC documents).
+
+<details>
+<summary>Answer</summary>
+
+- **Ingestion** – documents arrive via upload/email/API; classify the document type.
+- **Parsing** – OCR/layout extraction, or send page images directly to a **multimodal LLM**.
+- **Extraction** – prompt the model with a **JSON schema** (structured outputs) for the fields (invoice number, dates, line items, totals), with instructions to return null rather than guess.
+- **Validation** – deterministic checks: totals equal the sum of line items, dates valid, tax IDs match formats, cross-check against master data (vendor exists).
+- **Confidence and review** – route low-confidence or failed-validation documents to **human review** in a UI that highlights the source region; reviewer corrections become evaluation and fine-tuning data.
+- **Evaluation** – field-level accuracy per document type and vendor; track straight-through processing rate.
+- **Cost/latency** – a small model for classification and simple documents, larger models for complex ones; batch processing; PII handling and retention limits.
+
+</details>
+
+### 18. Design a voice assistant feature (speech in, speech out).
+
+<details>
+<summary>Answer</summary>
+
+**Pipeline option** – streaming ASR → LLM (with tools, e.g. calendar or order status) → streaming TTS. **Speech-native option** – one real-time multimodal model handling audio in and out, which reduces latency and preserves tone.
+
+Key concerns:
+- **Latency budget** – users expect replies within ~500–800 ms: stream everything, start TTS on the first sentence, use voice activity detection and smart endpointing (detect when the user finished speaking), allow **barge-in** (user interrupts – stop speaking immediately).
+- **Robustness** – noise, accents, code-switching; confirm before high-impact actions ("Pay ₹500 to Ravi?").
+- **Context** – conversation memory, user profile, device state.
+- **Privacy** – wake-word detection on device; minimise audio retention; consent.
+- **Evaluation** – word error rate, task success, latency percentiles, user satisfaction.
+
+</details>
+
 ---
 
 [⬅ Previous: MLOps & Production ML](19-mlops-production.md) · [⬅ Back to index](../README.md) · [Next: Responsible AI, Safety & Security ➡](21-responsible-ai-safety.md)

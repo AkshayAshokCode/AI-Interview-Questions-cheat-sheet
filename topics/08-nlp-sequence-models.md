@@ -157,6 +157,19 @@ Classic pipelines: lowercasing, removing punctuation and stop words, stemming/le
 
 </details>
 
+### 13. How do speech recognition (ASR) and text-to-speech (TTS) work today?
+
+<details>
+<summary>Answer</summary>
+
+- **ASR** – audio is converted to a log-mel spectrogram; an encoder (transformer/Conformer) processes it; outputs are decoded with **CTC**, RNN-Transducer (good for streaming) or an attention decoder. **Whisper** is an encoder-decoder transformer trained on huge multilingual weakly-labelled data, robust to accents and noise. Metric: **word error rate (WER)**.
+- **TTS** – text → linguistic/phoneme features → acoustic representation (mel spectrogram or discrete audio tokens) → waveform via a neural vocoder; modern systems use autoregressive transformers over audio codec tokens or diffusion/flow models, and can clone voices from short samples (a misuse risk).
+- **Speech-native LLMs** – process and generate audio directly, enabling low-latency voice assistants with natural turn-taking.
+
+Engineering concerns: streaming latency, voice activity detection and endpointing, background noise, code-switching (e.g. Hindi–English), and on-device vs cloud processing.
+
+</details>
+
 ---
 
 [⬅ Previous: Computer Vision](07-computer-vision.md) · [⬅ Back to index](../README.md) · [Next: Transformers Deep Dive ➡](09-transformers.md)

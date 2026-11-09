@@ -209,6 +209,33 @@ Measure performance **by slice** to confirm. Investigate causes: under-represent
 
 </details>
 
+### 18. Your LLM feature works well in English but poorly in Hindi and other Indian languages. What do you do?
+
+<details>
+<summary>Answer</summary>
+
+- **Measure** – build evaluation sets per language (including code-mixed Hinglish and transliterated text), since English results don't transfer.
+- **Model choice** – compare models on those sets; some models (including Indic-focused ones) handle Indian languages and scripts much better, and tokenisation efficiency differs (more tokens per sentence means higher cost and latency).
+- **Retrieval** – multilingual embedding models; index content in the languages users search in; query translation as a fallback.
+- **Prompting** – instruct the response language explicitly; provide examples in the target language.
+- **Fine-tuning** – on high-quality native data if prompting isn't enough.
+- **Speech** – if voice is involved, ASR quality for accents and code-switching is often the bottleneck.
+
+</details>
+
+### 19. How do you choose between several LLM vendors for a production feature?
+
+<details>
+<summary>Answer</summary>
+
+1. Build a task-specific **evaluation set** and grading method first.
+2. Compare quality, **latency** (TTFT and tokens/s at your prompt sizes), **cost** at projected volume (including caching and batch discounts), context length, tool-use and structured-output reliability.
+3. Check **non-functional needs**: data privacy terms and retention, regional hosting/data residency, compliance certifications, rate limits and enterprise SLAs, model deprecation policies.
+4. Avoid lock-in: an abstraction layer or LLM gateway, prompts kept portable, evals that can be re-run on any model.
+5. Re-evaluate periodically – the landscape changes every few months.
+
+</details>
+
 ---
 
 [⬅ Previous: ML Coding](22-ml-coding.md) · [⬅ Back to index](../README.md) · [Next: Company-Wise Questions & What's New ➡](24-company-wise-whats-new.md)

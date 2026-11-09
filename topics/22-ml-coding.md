@@ -365,6 +365,101 @@ A generator avoids loading copies of the whole dataset; in PyTorch, the equivale
 
 </details>
 
+### 15. Implement a two-layer neural network with backpropagation in NumPy.
+
+<details>
+<summary>Answer</summary>
+
+```python
+def init(d_in, d_hidden, d_out, seed=0):
+    rng = np.random.default_rng(seed)
+    return {"W1": rng.normal(0, np.sqrt(2 / d_in), (d_in, d_hidden)), "b1": np.zeros(d_hidden),
+            "W2": rng.normal(0, np.sqrt(2 / d_hidden), (d_hidden, d_out)), "b2": np.zeros(d_out)}
+
+def train_step(p, X, y, lr=0.1):
+    # forward
+    z1 = X @ p["W1"] + p["b1"]
+    h = np.maximum(0, z1)                         # ReLU
+    logits = h @ p["W2"] + p["b2"]
+    probs = softmax(logits)
+    n = len(y)
+    loss = -np.log(probs[np.arange(n), y] + 1e-12).mean()
+    # backward
+    dlogits = probs.copy(); dlogits[np.arange(n), y] -= 1; dlogits /= n   # softmax + CE gradient
+    dW2 = h.T @ dlogits; db2 = dlogits.sum(0)
+    dh = dlogits @ p["W2"].T
+    dz1 = dh * (z1 > 0)                           # ReLU gradient
+    dW1 = X.T @ dz1; db1 = dz1.sum(0)
+    for k, g in (("W1", dW1), ("b1", db1), ("W2", dW2), ("b2", db2)):
+        p[k] -= lr * g
+    return loss
+```
+
+Be ready to explain each gradient's shape and to verify with a **numerical gradient check** (finite differences on a few weights).
+
+</details>
+
+### 16. Implement IoU and non-maximum suppression (NMS).
+
+<details>
+<summary>Answer</summary>
+
+```python
+def iou(a, b):
+    # boxes as [x1, y1, x2, y2]
+    ix1, iy1 = max(a[0], b[0]), max(a[1], b[1])
+    ix2, iy2 = min(a[2], b[2]), min(a[3], b[3])
+    inter = max(0, ix2 - ix1) * max(0, iy2 - iy1)
+    area = lambda r: (r[2] - r[0]) * (r[3] - r[1])
+    return inter / (area(a) + area(b) - inter + 1e-9)
+
+def nms(boxes, scores, iou_threshold=0.5):
+    order = list(np.argsort(scores)[::-1])        # highest score first
+    keep = []
+    while order:
+        best = order.pop(0)
+        keep.append(best)
+        order = [i for i in order if iou(boxes[best], boxes[i]) < iou_threshold]
+    return keep
+```
+
+Follow-ups: vectorising IoU over all boxes, per-class NMS, Soft-NMS (decay scores instead of removing), and why DETR-style detectors don't need NMS.
+
+</details>
+
+### 17. Implement TF-IDF and use it for search.
+
+<details>
+<summary>Answer</summary>
+
+```python
+import math
+from collections import Counter
+
+def tfidf_index(docs):
+    tokenised = [d.lower().split() for d in docs]
+    df = Counter(term for doc in tokenised for term in set(doc))
+    n = len(docs)
+    idf = {t: math.log(n / df[t]) + 1 for t in df}
+    vectors = []
+    for doc in tokenised:
+        tf = Counter(doc)
+        vec = {t: (c / len(doc)) * idf[t] for t, c in tf.items()}
+        norm = math.sqrt(sum(v * v for v in vec.values())) or 1.0
+        vectors.append({t: v / norm for t, v in vec.items()})
+    return vectors, idf
+
+def search(query, vectors, idf, k=3):
+    q = Counter(query.lower().split())
+    qv = {t: c * idf.get(t, 0) for t, c in q.items()}
+    scores = [sum(qv.get(t, 0) * w for t, w in vec.items()) for vec in vectors]
+    return sorted(range(len(scores)), key=lambda i: -scores[i])[:k]
+```
+
+Discuss: an inverted index so only documents containing query terms are scored, BM25's improvements (term-frequency saturation, length normalisation), and hybrid search with embeddings.
+
+</details>
+
 ---
 
 [⬅ Previous: Responsible AI, Safety & Security](21-responsible-ai-safety.md) · [⬅ Back to index](../README.md) · [Next: Scenario-Based Questions ➡](23-scenario-based.md)

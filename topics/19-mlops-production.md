@@ -182,6 +182,33 @@ Many systems mix them: frequent incremental updates plus periodic full retrains.
 
 </details>
 
+### 16. How do you build a reliable data labelling pipeline?
+
+<details>
+<summary>Answer</summary>
+
+- **Clear guidelines** with examples and edge cases; iterate them as disagreements reveal ambiguity.
+- **Annotator quality control** – gold-standard questions, multiple labels per item for a sample, inter-annotator agreement, feedback to annotators.
+- **Tooling** – a labelling platform with pre-labelling (model or LLM suggestions that humans correct), keyboard shortcuts, and audit trails.
+- **Smart selection** – active learning to label the most useful examples; stratify to cover rare classes.
+- **LLM-assisted labelling** – use strong LLMs for first-pass labels, with human review on samples and disagreements.
+- **Versioned datasets** – track guideline versions and label changes; keep a clean, expert-labelled test set.
+- Privacy controls when annotators see user data.
+
+</details>
+
+### 17. How are models packaged and served in production (ONNX, TorchServe, Triton)?
+
+<details>
+<summary>Answer</summary>
+
+- **Formats** – native framework checkpoints, **ONNX** (portable format runnable with ONNX Runtime across hardware), TorchScript/`torch.export`, TensorRT engines (optimised for NVIDIA GPUs), Core ML / LiteRT for mobile.
+- **Servers** – NVIDIA **Triton** (multi-framework, dynamic batching, model ensembles), TorchServe, TensorFlow Serving, KServe/Seldon on Kubernetes, BentoML; vLLM/SGLang/TGI for LLMs; managed endpoints (SageMaker, Vertex AI).
+- **Key features** – dynamic batching, multiple model versions and canaries, GPU sharing, metrics, autoscaling, request validation.
+- Simple models can be served inside a normal web service (FastAPI) – choose the simplest option that meets latency and throughput needs.
+
+</details>
+
 ---
 
 [⬅ Previous: Generative Models](18-generative-models.md) · [⬅ Back to index](../README.md) · [Next: ML & GenAI System Design ➡](20-ml-genai-system-design.md)

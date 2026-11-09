@@ -197,6 +197,17 @@ Their weakness is the quadratic cost of attention in sequence length, which is d
 
 </details>
 
+### 17. What are state-space models (Mamba), and why are they interesting?
+
+<details>
+<summary>Answer</summary>
+
+**State-space models** process sequences with a recurrent-style hidden state updated by learned linear dynamics, but can be trained in parallel like convolutions. **Mamba** made the state updates **input-dependent (selective)**, letting the model decide what to remember or forget.
+
+Benefits: **linear time** in sequence length and constant memory per generated token (no growing KV cache), so they're attractive for very long sequences and fast inference. Weaknesses: exact recall of specific earlier tokens (copying, lookup) is harder than with attention. Many recent models are **hybrids** that mix a few attention layers with state-space or linear-attention layers to get most of the efficiency with attention's recall ability.
+
+</details>
+
 ---
 
 [⬅ Previous: NLP & Sequence Models](08-nlp-sequence-models.md) · [⬅ Back to index](../README.md) · [Next: LLM Fundamentals ➡](10-llm-fundamentals.md)

@@ -165,6 +165,26 @@ Fine-tuning a pretrained base model on many tasks phrased as **natural-language 
 
 </details>
 
+### 16. What is continued (domain-adaptive) pretraining, and when is it worth it?
+
+<details>
+<summary>Answer</summary>
+
+Continuing the **next-token pretraining objective** on a large amount of unlabelled domain text (legal, medical, code in a niche language, a new natural language) before instruction tuning. It teaches the model the domain's vocabulary, style and knowledge more deeply than SFT can.
+
+Worth it when you have a **large domain corpus** (hundreds of millions to billions of tokens), the domain is poorly covered by general models, and you'll use the model heavily. Costs: significant compute, risk of forgetting general skills (mix in general data), and you must redo instruction/preference tuning afterwards. For most companies, RAG + prompting or LoRA fine-tuning is the cheaper first step.
+
+</details>
+
+### 17. What is model merging?
+
+<details>
+<summary>Answer</summary>
+
+Combining the **weights** of several fine-tuned models that share the same base model, without further training: simple weight averaging ("model soups"), **task arithmetic** (adding the weight differences learned for different tasks), and methods like TIES and DARE that reduce interference between task updates. It can combine skills (e.g. a coding fine-tune and a language fine-tune) or improve robustness cheaply. Results are empirical and need evaluation; it only works for models from the same base.
+
+</details>
+
 ---
 
 [⬅ Previous: Retrieval-Augmented Generation (RAG)](13-rag.md) · [⬅ Back to index](../README.md) · [Next: Agents, Tool Use & MCP ➡](15-agents-tool-use.md)

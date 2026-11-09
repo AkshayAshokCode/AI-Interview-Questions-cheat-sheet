@@ -221,6 +221,35 @@ An autoencoder compresses inputs into a low-dimensional **latent code** (encoder
 
 </details>
 
+### 19. What is label smoothing?
+
+<details>
+<summary>Answer</summary>
+
+Instead of training on hard one-hot targets (1 for the true class, 0 elsewhere), use soft targets: `1 − ε` for the true class and `ε/(K − 1)` for the others (e.g. ε = 0.1). It stops the model from pushing logits towards infinity to become 100% confident, which improves **calibration** and generalisation and adds robustness to label noise. Widely used in image classification and in the original transformer. Side effect: it can hurt knowledge distillation from that model (less information in the teacher's probabilities).
+
+</details>
+
+### 20. What is an embedding layer?
+
+<details>
+<summary>Answer</summary>
+
+A trainable lookup table mapping each discrete ID (word/token, user, product, category) to a dense vector: a matrix of shape (number of IDs × dimension), where row i is the vector for ID i. It's mathematically equivalent to multiplying a one-hot vector by a weight matrix, but implemented as a fast index lookup. The vectors are learned with the rest of the model, so similar IDs end up close together. Embedding tables can be huge in recommender systems (billions of IDs) – handled with hashing, sharding across machines and mixed-dimension embeddings.
+
+</details>
+
+### 21. What are graph neural networks (GNNs)?
+
+<details>
+<summary>Answer</summary>
+
+Neural networks that operate on **graphs** (nodes and edges): each layer updates a node's representation by **aggregating messages from its neighbours** (message passing), so after k layers a node's embedding reflects its k-hop neighbourhood. Variants: GCN (normalised neighbour averaging), GraphSAGE (sampled neighbours – scales to huge graphs), GAT (attention over neighbours).
+
+Uses: fraud rings (accounts sharing devices/cards), recommendations (user–item graphs, e.g. PinSage at Pinterest), social networks, molecules and drug discovery, traffic/ETA prediction on road graphs, knowledge graphs. Challenges: scaling to billions of edges (sampling, partitioning) and over-smoothing with many layers.
+
+</details>
+
 ---
 
 [⬅ Previous: Evaluation Metrics](05-evaluation-metrics.md) · [⬅ Back to index](../README.md) · [Next: Computer Vision ➡](07-computer-vision.md)

@@ -226,6 +226,49 @@ The model itself remembers nothing between requests: each API call must include 
 
 </details>
 
+### 19. How is LLM pretraining data prepared?
+
+<details>
+<summary>Answer</summary>
+
+- **Sources** – web crawls (Common Crawl), books, code repositories, scientific papers, Wikipedia, curated and licensed data, synthetic data.
+- **Extraction** – convert HTML/PDFs to clean text, remove boilerplate (menus, ads).
+- **Filtering** – language identification, quality classifiers (e.g. trained to recognise reference-quality text), heuristics (length, symbol ratio, repetition), toxicity and PII removal.
+- **Deduplication** – exact and near-duplicate removal (MinHash/LSH), which improves quality and reduces memorisation.
+- **Decontamination** – remove benchmark test sets.
+- **Mixing** – choose proportions of web, code, maths, multilingual data; often upsample high-quality data, and change the mix late in training ("annealing").
+- **Tokenisation** and packing into fixed-length sequences.
+
+Data quality has proven to be as important as model size.
+
+</details>
+
+### 20. What's the difference between a base model and an instruct/chat model?
+
+<details>
+<summary>Answer</summary>
+
+- A **base model** (pretrained only) continues text: given "What is the capital of France?" it might continue with more quiz questions rather than answering. It's useful for fine-tuning, research, completion-style tasks and few-shot prompting.
+- An **instruct/chat model** has been fine-tuned (SFT + preference tuning) to follow instructions in a conversation format with roles, answer helpfully, refuse unsafe requests and use tools.
+
+Chat models expect their specific **chat template** (special tokens marking system/user/assistant turns); formatting prompts incorrectly for open-weight models degrades quality.
+
+</details>
+
+### 21. Why do LLMs struggle with counting letters, arithmetic and some simple tasks?
+
+<details>
+<summary>Answer</summary>
+
+- **Tokenisation** – the model sees subword tokens, not characters: "strawberry" may be 2–3 tokens, so counting the r's requires knowledge it can't directly "see".
+- **Arithmetic** – numbers are split into tokens inconsistently, and exact multi-digit calculation is an algorithm the model must emulate step by step in text.
+- **No working memory beyond the text** – without writing out intermediate steps, multi-step tasks fail more often.
+- **Pattern matching over verification** – the model produces the most plausible continuation.
+
+Mitigations: chain-of-thought or reasoning models, **tool use** (calculator, code execution) for exact computation, and structured approaches (spell the word out first). This is also a good reason to keep deterministic logic in code.
+
+</details>
+
 ---
 
 [⬅ Previous: Transformers Deep Dive](09-transformers.md) · [⬅ Back to index](../README.md) · [Next: Prompt Engineering ➡](11-prompt-engineering.md)
