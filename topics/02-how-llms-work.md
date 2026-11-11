@@ -1,12 +1,23 @@
-# How LLMs Work (For People Who Use Them)
+# AI Capabilities & Limitations
 
 [⬅ Back to index](../README.md)
 
-Covers: what an LLM is, how it generates text, tokens and context windows, sampling and temperature, why outputs vary, hallucinations, knowledge cutoffs, statelessness and memory, extended thinking, multimodality, how assistants are trained, capabilities and limitations, and sycophancy.
+Covers: what we mean by "AI", how an assistant gets its character, and the four properties that explain most AI behaviour – next-token prediction (how output is generated, sampling, variability), knowledge (what the model knows, cutoffs, hallucinations), working memory (context window, statelessness, long-context limits) and steerability (instructions, system prompts, sycophancy) – plus extended thinking, multimodality, when properties collide, and diagnosing unexpected outputs.
 
 ---
 
-### 1. What is a large language model?
+## What We Mean by AI
+
+### 1. What do people mean by "AI" today, and how is generative AI different from earlier AI?
+
+<details>
+<summary>Answer</summary>
+
+"AI" covers many techniques. Earlier, most deployed AI was **predictive**: models trained for one narrow task (spam detection, recommendations, fraud scores, image classification). **Generative AI** – large language models and image/audio/video generators – produces new content and can do many different tasks from instructions in plain language. When people say "AI" in software engineering conversations today, they usually mean assistants and APIs built on **large language models** (Claude, Gemini, GPT models) that read and write text and code, and increasingly see images, use tools and take actions.
+
+</details>
+
+### 2. What is a large language model?
 
 <details>
 <summary>Answer</summary>
@@ -16,121 +27,23 @@ A large neural network (almost always a decoder-only transformer) trained to **p
 It generates text **autoregressively**: predict a probability distribution over the vocabulary, pick a token, append it, repeat.
 
 </details>
-### 2. How does an LLM generate a response, in plain terms?
+
+### 3. How does an AI assistant get its "character" and behaviour?
 
 <details>
 <summary>Answer</summary>
 
-1. Your text is split into **tokens** and turned into numbers.
-2. The model (a transformer) reads all the tokens and, using **attention**, works out how each token relates to the others.
-3. It outputs a **probability for every possible next token**.
-4. One token is chosen (the most likely, or sampled), appended, and the process repeats until it emits a stop token or hits the limit.
+In stages:
+1. **Pretraining** on huge amounts of text teaches language, facts, reasoning patterns and code – but the result just continues text.
+2. **Fine-tuning on examples** of good assistant conversations teaches it to follow instructions and respond helpfully.
+3. **Feedback-based training** (human and AI feedback, written principles such as Anthropic's constitution for Claude) shapes values, tone, honesty and what it declines to do.
+4. At use time, the **system prompt** and conversation steer it further.
 
-Consequences for users: the model writes **left to right without a separate "fact database"**, so fluent text isn't proof of truth; longer outputs take longer; and asking it to think step by step changes the result because each written step influences the next.
-
-</details>
-
-### 3. What are tokens and the context window, and why do they matter to engineers?
-
-<details>
-<summary>Answer</summary>
-
-- **Tokens** are the units the model reads and writes (subwords; roughly ¾ of an English word on average). APIs **price and rate-limit by tokens**, and latency grows with output tokens.
-- The **context window** is the maximum number of tokens (prompt + conversation + retrieved docs + output) the model can attend to at once – from thousands to over a million tokens.
-
-Engineering implications: budget tokens (system prompt, history, retrieved chunks, expected output), trim or summarise conversation history, and remember that more context costs more, adds latency, and can dilute attention.
-
-</details>
-### 4. How does decoding work? Explain temperature, top-k and top-p.
-
-<details>
-<summary>Answer</summary>
-
-The model outputs logits over the vocabulary; a decoding strategy picks the next token:
-- **Greedy** – always the most likely token. Deterministic but can be repetitive.
-- **Temperature** – divide logits by T before softmax. T < 1 sharpens the distribution (more focused, deterministic); T > 1 flattens it (more diverse/creative, more errors). T → 0 approaches greedy.
-- **Top-k** – sample only from the k most likely tokens.
-- **Top-p (nucleus)** – sample from the smallest set of tokens whose cumulative probability ≥ p (e.g. 0.9); adapts to how confident the model is.
-- **Beam search** – keeps several candidate sequences; used for translation, rarely for open-ended chat (bland output).
-- **Repetition/frequency penalties** reduce loops.
-
-Use low temperature for extraction, classification and code; higher for brainstorming and creative writing.
-
-</details>
-### 5. Why does the same prompt give different answers?
-
-<details>
-<summary>Answer</summary>
-
-- **Sampling** with temperature > 0 is random by design.
-- Even at temperature 0, outputs can vary because of floating-point non-determinism in GPU kernels and **batching** (requests are batched with others, changing numerical order of operations).
-- Provider-side model updates change behaviour over time (pin model versions).
-
-For reliability: low temperature, structured outputs, explicit instructions, pinned model versions, and evaluation over many samples rather than one.
-
-</details>
-### 6. What are hallucinations, why do they happen, and how do you reduce them?
-
-<details>
-<summary>Answer</summary>
-
-A hallucination is fluent output that is **false or unsupported** (invented citations, wrong facts, nonexistent APIs).
-
-**Why:** the model is trained to produce plausible continuations, not to verify truth; knowledge is compressed and imperfect, has a cutoff date, and training/evaluation often reward guessing over saying "I don't know".
-
-**Reduce it with:**
-- **Grounding** with retrieval (RAG) and instructions to answer only from the provided context, with citations.
-- Allowing and encouraging "I don't know".
-- Tools for facts and calculations (search, databases, code execution).
-- Lower temperature for factual tasks; structured outputs.
-- Verification steps (a second pass or another model checks claims against sources).
-- Evaluation sets that measure faithfulness, and human review for high-stakes outputs.
-
-</details>
-### 7. What is a knowledge cutoff, and how do you handle questions about recent events?
-
-<details>
-<summary>Answer</summary>
-
-The model's training data stops at a certain date, so it doesn't know later events and may confidently state outdated facts. Handle it with: retrieval or web search tools for current information, putting the current date in the prompt, instructing the model to say when information may be outdated, and keeping time-sensitive facts in your own data sources.
-
-</details>
-### 8. What does it mean that LLMs are "stateless"? How does chat memory work?
-
-<details>
-<summary>Answer</summary>
-
-The model itself remembers nothing between requests: each API call must include everything it should know. A "conversation" is the application re-sending the history (system prompt + previous turns) every time. Long conversations therefore cost more and eventually exceed the context window, so apps **truncate, summarise** older turns, or store facts in a **memory store** retrieved when relevant. Providers' **prompt caching** reduces the cost of re-sending the same prefix.
-
-</details>
-### 9. What is extended (adaptive) thinking, from a user's point of view?
-
-<details>
-<summary>Answer</summary>
-
-Models with extended thinking reason in a hidden or summarised scratchpad before writing the visible answer. Newer Claude models use **adaptive thinking**: the model decides how much to think based on the task, and you steer overall depth and token spend with an **effort** setting (low → max) rather than a fixed thinking-token budget.
-
-Use more effort for multi-step reasoning, coding, maths, planning and agentic work; use less for chat, classification and simple extraction, where it mostly adds latency and cost. Thinking tokens are billed as output tokens, so measure whether higher effort actually improves your results.
+So an assistant's personality and boundaries are deliberately trained, not accidental – which is why different assistants behave differently with the same prompt.
 
 </details>
 
-### 10. What are multimodal LLMs?
-
-<details>
-<summary>Answer</summary>
-
-Models that accept (and sometimes produce) more than text: images, audio, video, documents. Typical architecture: modality encoders (e.g. a vision transformer) whose outputs are projected into the LLM's token space, or models trained natively on interleaved multimodal data. Uses: document and screenshot understanding, visual Q&A, speech assistants with real-time voice, UI-operating agents. Engineering considerations: images and audio consume many tokens (cost), resolution trade-offs, and hallucinated visual details.
-
-</details>
-### 11. What is in-context learning?
-
-<details>
-<summary>Answer</summary>
-
-The ability of LLMs to perform a new task from **instructions and examples in the prompt**, without any weight updates. Few-shot examples demonstrate format and behaviour; the model infers the pattern. This emerged with scale (GPT-3) and is why prompting can replace task-specific training for many problems. Limits: examples consume context tokens, results are sensitive to example choice and order, and complex or highly specialised tasks may still need fine-tuning.
-
-</details>
-### 12. How is a modern chat LLM trained, end to end?
+### 4. How is a modern chat LLM trained, end to end?
 
 <details>
 <summary>Answer</summary>
@@ -153,7 +66,79 @@ flowchart TD
 See [Fine-Tuning & Alignment](16-choosing-models.md).
 
 </details>
-### 13. Why do LLMs struggle with counting letters, arithmetic and some simple tasks?
+
+## Property 1: Next-Token Prediction
+
+### 5. How does an LLM generate a response, in plain terms?
+
+<details>
+<summary>Answer</summary>
+
+1. Your text is split into **tokens** and turned into numbers.
+2. The model (a transformer) reads all the tokens and, using **attention**, works out how each token relates to the others.
+3. It outputs a **probability for every possible next token**.
+4. One token is chosen (the most likely, or sampled), appended, and the process repeats until it emits a stop token or hits the limit.
+
+Consequences for users: the model writes **left to right without a separate "fact database"**, so fluent text isn't proof of truth; longer outputs take longer; and asking it to think step by step changes the result because each written step influences the next.
+
+</details>
+
+### 6. What are tokens and the context window, and why do they matter to engineers?
+
+<details>
+<summary>Answer</summary>
+
+- **Tokens** are the units the model reads and writes (subwords; roughly ¾ of an English word on average). APIs **price and rate-limit by tokens**, and latency grows with output tokens.
+- The **context window** is the maximum number of tokens (prompt + conversation + retrieved docs + output) the model can attend to at once – from thousands to over a million tokens.
+
+Engineering implications: budget tokens (system prompt, history, retrieved chunks, expected output), trim or summarise conversation history, and remember that more context costs more, adds latency, and can dilute attention.
+
+</details>
+
+### 7. How does decoding work? Explain temperature, top-k and top-p.
+
+<details>
+<summary>Answer</summary>
+
+The model outputs logits over the vocabulary; a decoding strategy picks the next token:
+- **Greedy** – always the most likely token. Deterministic but can be repetitive.
+- **Temperature** – divide logits by T before softmax. T < 1 sharpens the distribution (more focused, deterministic); T > 1 flattens it (more diverse/creative, more errors). T → 0 approaches greedy.
+- **Top-k** – sample only from the k most likely tokens.
+- **Top-p (nucleus)** – sample from the smallest set of tokens whose cumulative probability ≥ p (e.g. 0.9); adapts to how confident the model is.
+- **Beam search** – keeps several candidate sequences; used for translation, rarely for open-ended chat (bland output).
+- **Repetition/frequency penalties** reduce loops.
+
+Use low temperature for extraction, classification and code; higher for brainstorming and creative writing.
+
+</details>
+
+### 8. Why does the same prompt give different answers?
+
+<details>
+<summary>Answer</summary>
+
+- **Sampling** with temperature > 0 is random by design.
+- Even at temperature 0, outputs can vary because of floating-point non-determinism in GPU kernels and **batching** (requests are batched with others, changing numerical order of operations).
+- Provider-side model updates change behaviour over time (pin model versions).
+
+For reliability: low temperature, structured outputs, explicit instructions, pinned model versions, and evaluation over many samples rather than one.
+
+</details>
+
+### 9. What follows from the fact that models generate text one token at a time?
+
+<details>
+<summary>Answer</summary>
+
+- **Fluency isn't accuracy** – the model produces plausible continuations; plausible and true aren't the same.
+- **Early words shape later ones** – once it starts down a wrong path it tends to continue consistently (asking it to plan or think first helps).
+- **Writing out reasoning helps** – each intermediate step becomes context for the next, which is why step-by-step thinking improves hard tasks.
+- **Format follows the prompt** – the style and structure of your prompt influence the style of the answer.
+- **Longer output = more time and cost**, since every token is generated in sequence.
+
+</details>
+
+### 10. Why do LLMs struggle with counting letters, arithmetic and some simple tasks?
 
 <details>
 <summary>Answer</summary>
@@ -166,7 +151,205 @@ See [Fine-Tuning & Alignment](16-choosing-models.md).
 Mitigations: chain-of-thought or reasoning models, **tool use** (calculator, code execution) for exact computation, and structured approaches (spell the word out first). This is also a good reason to keep deterministic logic in code.
 
 </details>
-### 14. What are LLMs good at, and where are they weak?
+
+### 11. What is in-context learning?
+
+<details>
+<summary>Answer</summary>
+
+The ability of LLMs to perform a new task from **instructions and examples in the prompt**, without any weight updates. Few-shot examples demonstrate format and behaviour; the model infers the pattern. This emerged with scale (GPT-3) and is why prompting can replace task-specific training for many problems. Limits: examples consume context tokens, results are sensitive to example choice and order, and complex or highly specialised tasks may still need fine-tuning.
+
+</details>
+
+## Property 2: Knowledge
+
+### 12. Where does a model's knowledge come from, and what are its gaps?
+
+<details>
+<summary>Answer</summary>
+
+Knowledge comes from **training data** up to a cutoff date, compressed into the model's parameters – not stored as a searchable database. Consequences:
+- Well-covered topics (popular languages, common APIs, general knowledge) are strong; **niche, internal or very recent** information is weak or missing.
+- It doesn't know your company's code, documents or data unless you provide them.
+- It can't reliably tell you **where** a fact came from.
+- Knowledge can be **outdated** (deprecated APIs, old library versions).
+
+Fix knowledge gaps by giving the model the information: documents in the prompt, retrieval (RAG), web search or tools.
+
+</details>
+
+### 13. What is a knowledge cutoff, and how do you handle questions about recent events?
+
+<details>
+<summary>Answer</summary>
+
+The model's training data stops at a certain date, so it doesn't know later events and may confidently state outdated facts. Handle it with: retrieval or web search tools for current information, putting the current date in the prompt, instructing the model to say when information may be outdated, and keeping time-sensitive facts in your own data sources.
+
+</details>
+
+### 14. What are hallucinations, why do they happen, and how do you reduce them?
+
+<details>
+<summary>Answer</summary>
+
+A hallucination is fluent output that is **false or unsupported** (invented citations, wrong facts, nonexistent APIs).
+
+**Why:** the model is trained to produce plausible continuations, not to verify truth; knowledge is compressed and imperfect, has a cutoff date, and training/evaluation often reward guessing over saying "I don't know".
+
+**Reduce it with:**
+- **Grounding** with retrieval (RAG) and instructions to answer only from the provided context, with citations.
+- Allowing and encouraging "I don't know".
+- Tools for facts and calculations (search, databases, code execution).
+- Lower temperature for factual tasks; structured outputs.
+- Verification steps (a second pass or another model checks claims against sources).
+- Evaluation sets that measure faithfulness, and human review for high-stakes outputs.
+
+</details>
+
+### 15. Why do models sometimes invent APIs, packages or citations?
+
+<details>
+<summary>Answer</summary>
+
+They generate what **looks like** a correct answer from patterns: a function name that follows a library's naming conventions, a plausible package name, a citation in the right format. If the real fact isn't strongly represented in training data – or the model wasn't given it – it fills the gap with something plausible. Defences: provide current docs in context, ask for sources you can check, run the code and tests, verify packages exist (and aren't malicious look-alikes), and use tools like web search or documentation lookup.
+
+</details>
+
+## Property 3: Working Memory
+
+### 16. What does it mean that LLMs are "stateless"? How does chat memory work?
+
+<details>
+<summary>Answer</summary>
+
+The model itself remembers nothing between requests: each API call must include everything it should know. A "conversation" is the application re-sending the history (system prompt + previous turns) every time. Long conversations therefore cost more and eventually exceed the context window, so apps **truncate, summarise** older turns, or store facts in a **memory store** retrieved when relevant. Providers' **prompt caching** reduces the cost of re-sending the same prefix.
+
+</details>
+
+### 17. What are the limits of the context window as working memory?
+
+<details>
+<summary>Answer</summary>
+
+The context window is everything the model can "see" for one response – think of it as **working memory**, not long-term memory.
+- It's **finite**: very long conversations or documents must be trimmed, summarised or retrieved selectively.
+- **Attention isn't uniform**: in very long inputs, details (especially in the middle) can be missed or mixed up.
+- It's **rebuilt every request**: anything not included isn't known, even if it was said earlier in a previous session.
+- **Everything competes for space**: system prompts, tool definitions, documents and history all use the same budget.
+
+Good practice: keep context relevant, put key instructions clearly, and verify details from long inputs.
+
+</details>
+
+### 18. Why might an assistant "forget" something you told it earlier in a long chat?
+
+<details>
+<summary>Answer</summary>
+
+Possible reasons: the earlier messages were **truncated or summarised** by the app to fit the context window; the detail was buried in a very long conversation and **not attended to**; or it was in a **different session**, which the model never sees unless the app has a memory feature. Fixes: restate key facts, keep important constraints in the system prompt or project instructions, start a new conversation with a short summary, or use memory features designed for persistence.
+
+</details>
+
+## Property 4: Steerability
+
+### 19. What does "steerability" mean, and how can you steer a model?
+
+<details>
+<summary>Answer</summary>
+
+Steerability is how much you can **shape the model's behaviour** with instructions. You steer with:
+- **System prompts** – role, rules, tone and format for the whole conversation.
+- **Clear instructions** with context and reasons.
+- **Examples** of the output you want.
+- **Structure** – XML-tagged sections, output schemas.
+- **Settings** – effort/thinking depth, and sampling settings where available.
+
+Modern models follow instructions closely, often literally – so vague or contradictory instructions produce vague or inconsistent results.
+
+</details>
+
+### 20. What are the limits of steering a model with prompts?
+
+<details>
+<summary>Answer</summary>
+
+- Prompts can't add **knowledge** the model doesn't have, or reliably fix tasks beyond its **capability**.
+- The model's **trained values and safety boundaries** take precedence over instructions to violate them.
+- **Conflicting instructions** (system vs user, or two rules that clash) lead to unpredictable trade-offs.
+- Steering is **probabilistic**, not guaranteed – critical rules (permissions, data access, limits) must be enforced in code, not only in the prompt.
+- Users and injected content can push against your instructions (prompt injection, jailbreaks).
+
+</details>
+
+### 21. What is sycophancy in LLMs, and why does it matter?
+
+<details>
+<summary>Answer</summary>
+
+The tendency of models to **agree with the user** or tell them what they want to hear – changing a correct answer when the user pushes back, praising flawed work, confirming false beliefs. It partly comes from preference training (people rate agreeable answers highly). It matters for coding, medical, legal and educational uses where honest disagreement is essential. Mitigations: training data and rewards that value honesty, prompts that ask for critical evaluation, and evaluations that test whether answers change under social pressure.
+
+</details>
+
+## Other Capabilities
+
+### 22. What is extended (adaptive) thinking, from a user's point of view?
+
+<details>
+<summary>Answer</summary>
+
+Models with extended thinking reason in a hidden or summarised scratchpad before writing the visible answer. Newer Claude models use **adaptive thinking**: the model decides how much to think based on the task, and you steer overall depth and token spend with an **effort** setting (low → max) rather than a fixed thinking-token budget.
+
+Use more effort for multi-step reasoning, coding, maths, planning and agentic work; use less for chat, classification and simple extraction, where it mostly adds latency and cost. Thinking tokens are billed as output tokens, so measure whether higher effort actually improves your results.
+
+</details>
+
+### 23. What are multimodal LLMs?
+
+<details>
+<summary>Answer</summary>
+
+Models that accept (and sometimes produce) more than text: images, audio, video, documents. Typical architecture: modality encoders (e.g. a vision transformer) whose outputs are projected into the LLM's token space, or models trained natively on interleaved multimodal data. Uses: document and screenshot understanding, visual Q&A, speech assistants with real-time voice, UI-operating agents. Engineering considerations: images and audio consume many tokens (cost), resolution trade-offs, and hallucinated visual details.
+
+</details>
+
+## Putting It Together
+
+### 24. What happens when these properties collide?
+
+<details>
+<summary>Answer</summary>
+
+Many surprising outputs come from two properties interacting:
+- **Next-token fluency + a knowledge gap** → a confident, well-written but invented answer.
+- **Working-memory limits + steerability** → instructions given early in a long session get lost, so the model drifts from them.
+- **Steerability + sycophancy** → the model agrees with a wrong premise in your question because it's following your framing.
+- **Knowledge cutoff + instruction to be helpful** → outdated code presented as current.
+
+Recognising the interaction tells you the fix: supply knowledge, restate instructions, reframe neutrally, or add verification.
+
+</details>
+
+### 25. How do you diagnose an unexpected AI output?
+
+<details>
+<summary>Answer</summary>
+
+Ask **which property** caused it, then apply the matching fix:
+
+| Symptom | Likely property | Targeted fix |
+|---|---|---|
+| Invented fact, API or citation | Knowledge | Provide sources/docs, use search or tools, allow "I don't know" |
+| Wrong count, arithmetic, letter-level detail | Next-token prediction / tokens | Use code or a calculator tool, ask for step-by-step work |
+| Ignored an earlier instruction or detail | Working memory | Restate it, shorten context, move it into the system prompt |
+| Different answer each time | Sampling | Lower randomness where possible, tighten the prompt, use structured output |
+| Agreed with your wrong assumption | Steerability / sycophancy | Ask neutrally, request critique or counter-arguments |
+| Off-format or off-tone response | Steerability | Clearer instructions, examples, a schema |
+
+This mental model is more useful than "the AI is dumb" – it turns failures into specific fixes.
+
+</details>
+
+### 26. What are LLMs good at, and where are they weak?
 
 <details>
 <summary>Answer</summary>
@@ -185,12 +368,17 @@ The practical rule: give the model the information it needs, give it tools for e
 
 </details>
 
-### 15. What is sycophancy in LLMs, and why does it matter?
+### 27. Where on the capability–limitation spectrum do common engineering tasks fall?
 
 <details>
 <summary>Answer</summary>
 
-The tendency of models to **agree with the user** or tell them what they want to hear – changing a correct answer when the user pushes back, praising flawed work, confirming false beliefs. It partly comes from preference training (people rate agreeable answers highly). It matters for coding, medical, legal and educational uses where honest disagreement is essential. Mitigations: training data and rewards that value honesty, prompts that ask for critical evaluation, and evaluations that test whether answers change under social pressure.
+- **Reliably strong:** explaining code, boilerplate and scaffolding, writing tests for clear behaviour, refactors with tests, converting formats, summarising docs and logs, drafting documentation.
+- **Strong with verification:** debugging from stack traces, writing SQL or regex, implementing features in familiar stacks, code review suggestions.
+- **Needs heavy oversight:** security-sensitive code, concurrency, performance tuning, niche or brand-new libraries, large architectural decisions.
+- **Use tools instead of model memory:** exact calculations, current versions and APIs, facts about your private systems.
+
+Place each task on this spectrum to decide how much to delegate and how much to check.
 
 </details>
 

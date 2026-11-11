@@ -26,7 +26,7 @@ This is expected of Android, iOS, backend, frontend and full-stack engineers –
 <summary>Answer</summary>
 
 - **Your AI usage** – "How do you use AI in your work?", "How do you make sure AI-generated code is correct?"
-- **Fundamentals** – tokens, context windows, temperature, hallucinations, why outputs vary. See [How LLMs Work](02-how-llms-work.md).
+- **Fundamentals** – tokens, context windows, temperature, hallucinations, why outputs vary. See [AI Capabilities & Limitations](02-how-llms-work.md).
 - **Prompting and context** – how you'd get reliable output. See [Prompt Engineering](04-prompt-engineering.md).
 - **Building AI features** – calling an LLM API from your app, streaming, tool use, RAG, structured outputs. See [Building With LLM APIs](07-building-with-llm-apis.md).
 - **Quality and risk** – how you'd test an AI feature, prevent prompt injection, protect user data, control cost.
@@ -134,4 +134,4 @@ The free Anthropic Academy courses (AI Fluency, Claude Code in Action, Building 
 
 ---
 
-[⬅ Back to index](../README.md) · [Next: How LLMs Work (For People Who Use Them) ➡](02-how-llms-work.md)
+[⬅ Back to index](../README.md) · [Next: AI Capabilities & Limitations ➡](02-how-llms-work.md)

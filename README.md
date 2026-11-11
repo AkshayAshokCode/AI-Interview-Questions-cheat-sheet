@@ -1,6 +1,6 @@
 # AI Interview Questions – Cheat Sheet
 
-The AI questions **every software engineer** should be ready for – Android, iOS, backend or frontend: **299 questions with interview-ready answers** in 22 topics. It covers what engineers are expected to know about AI today – how LLMs behave, using AI tools well (AI fluency, AI coding assistants like Claude Code), prompting and context, adding AI features to apps (LLM APIs, tool use, MCP, RAG, agents), testing and evals, guardrails, cost and latency, and AI feature design. No machine-learning maths, statistics or model training – this is about using AI, following the topics in the free Anthropic Academy courses.
+The AI questions **every software engineer** should be ready for – Android, iOS, backend or frontend: **345 questions with interview-ready answers** in 22 topics. It covers what engineers are expected to know about AI today – AI capabilities and limitations, AI fluency, using AI tools well (AI fluency, AI coding assistants like Claude Code), prompting and context, adding AI features to apps (LLM APIs, tool use, MCP, RAG, agents), testing and evals, guardrails, cost and latency, and AI feature design. No machine-learning maths, statistics or model training – this is about using AI, following the topics in the free Anthropic Academy courses.
 
 Every answer is hidden in a collapsible block, so you can **test yourself first** and then click to check.
 
@@ -30,8 +30,8 @@ Also see: **[Android](https://github.com/AkshayAshokCode/Android-Interview-Quest
 | # | Topic | Questions | Key areas |
 |---|---|---|---|
 | 01 | [AI in Software Engineering Interviews](topics/01-ai-interviews-overview.md) | 9 | What gets asked, "how do you use AI?", AI-allowed coding rounds, what is and isn\'t expected, opinion questions, preparation |
-| 02 | [How LLMs Work (For People Who Use Them)](topics/02-how-llms-work.md) | 15 | Tokens, context window, temperature, hallucinations, knowledge cutoff, statelessness, extended thinking, strengths and limits |
-| 03 | [AI Fluency: Working Effectively With AI](topics/03-ai-fluency.md) | 12 | The 4Ds (Delegation, Description, Discernment, Diligence), automation/augmentation/agency, verifying output, responsible use |
+| 02 | [AI Capabilities & Limitations](topics/02-how-llms-work.md) | 27 | Generative AI, how assistants get their character, next-token prediction, knowledge, working memory, steerability, when properties collide, diagnosing odd outputs |
+| 03 | [AI Fluency: Working Effectively With AI](topics/03-ai-fluency.md) | 24 | The 4Ds in depth (Delegation, Description, Discernment, Diligence), automation/augmentation/agency, project delegation, the description–discernment loop, verification, when not to use AI |
 
 ### ✍️ Prompting & Context
 
@@ -47,7 +47,7 @@ Also see: **[Android](https://github.com/AkshayAshokCode/Android-Interview-Quest
 |---|---|---|---|
 | 07 | [Building With LLM APIs](topics/07-building-with-llm-apis.md) | 17 | Calling an LLM from a mobile/web app, messages and multi-turn, streaming, stop reasons, errors and rate limits, key security, testing LLM code |
 | 08 | [Tool Use (Function Calling)](topics/08-tool-use.md) | 10 | Tool definitions, the tool loop, parallel calls, errors, server tools (web search, code execution), many tools, tool security |
-| 09 | [Model Context Protocol (MCP)](topics/09-mcp.md) | 9 | Hosts, clients and servers; tools vs resources vs prompts; transports; building and testing servers; sampling; MCP vs skills; security |
+| 09 | [Model Context Protocol (MCP)](topics/09-mcp.md) | 31 | Why MCP, request flow, tools/resources/prompts in depth, building and testing servers, clients, JSON-RPC messages and handshake, stdio vs StreamableHTTP, stateless scaling, sampling, notifications, roots, OAuth, security |
 | 10 | [RAG & Agentic Search](topics/10-rag-search.md) | 20 | Pipeline, embeddings, chunking, BM25 + hybrid search, reranking, contextual retrieval, permissions, evaluation, agentic search |
 | 11 | [Agents & Workflows](topics/11-agents-workflows.md) | 20 | Workflow patterns, when to build an agent, ReAct, planning, memory, subagents, skills, human-in-the-loop, long-running agents |
 | 12 | [AI Coding Assistants & Claude Code](topics/12-ai-coding-assistants.md) | 23 | Types of AI coding tools, good coding requests, debugging, tests, code review, sharing code safely, CLAUDE.md, plan mode, hooks, reviewing AI code |
@@ -80,7 +80,7 @@ Also see: **[Android](https://github.com/AkshayAshokCode/Android-Interview-Quest
 
 | Day | Topics |
 |---|---|
-| 1 | 01 AI in SWE Interviews + 02 How LLMs Work |
+| 1 | 01 AI in SWE Interviews + 02 AI Capabilities & Limitations |
 | 2 | 03 AI Fluency |
 | 3 | 04 Prompt Engineering (rewrite 3 real prompts) |
 | 4 | 05 Context Engineering + 06 Structured Outputs |
@@ -104,7 +104,9 @@ Also see: **[Android](https://github.com/AkshayAshokCode/Android-Interview-Quest
 <details>
 <summary>Open the quick revision list</summary>
 
-**How LLMs behave**
+**AI capabilities & limitations**
+- Four properties explain most behaviour: next-token prediction, knowledge (training data + cutoff), working memory (context window) and steerability (instructions).
+- Diagnose odd output by property: invented fact → knowledge; miscount → tokens; forgot an instruction → working memory; agreed with a wrong premise → sycophancy.
 - LLMs predict the next token; fluent ≠ true. They're stateless: the app re-sends the history every call.
 - Tokens drive cost, latency and context limits. Output tokens cost more than input tokens.
 - Hallucinations come from producing plausible text without verified knowledge. Ground with sources, allow "I don't know", verify.
@@ -123,6 +125,7 @@ Also see: **[Android](https://github.com/AkshayAshokCode/Android-Interview-Quest
 **Building**
 - Tool use: the model requests, your code executes, results go back. Return all parallel results in one message; return errors as results.
 - MCP: hosts/clients/servers; tools (model-controlled), resources (app-controlled), prompts (user-controlled); stdio or streamable HTTP.
+- MCP messages are JSON-RPC requests, results and notifications; `initialize` → capabilities → `initialized`. Sampling = server borrows the client's model; roots = folders the server may use; stateless HTTP scales, stateful enables server-initiated messages.
 - RAG: parse → chunk → embed + BM25 → hybrid retrieve → rerank → answer with citations. Contextual retrieval adds chunk context before indexing.
 - Workflows (chaining, routing, parallelisation, orchestrator-workers, evaluator-optimizer) before agents. Agents need tools, feedback, limits and checkpoints.
 - Coding agents: explore → plan → implement → verify → review → commit. Keep CLAUDE.md short and current; hooks are deterministic.
