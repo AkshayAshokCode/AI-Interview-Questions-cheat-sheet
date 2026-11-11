@@ -103,17 +103,7 @@ The model's training data stops at a certain date, so it doesn't know later even
 The model itself remembers nothing between requests: each API call must include everything it should know. A "conversation" is the application re-sending the history (system prompt + previous turns) every time. Long conversations therefore cost more and eventually exceed the context window, so apps **truncate, summarise** older turns, or store facts in a **memory store** retrieved when relevant. Providers' **prompt caching** reduces the cost of re-sending the same prefix.
 
 </details>
-### 9. What are reasoning models and test-time compute?
-
-<details>
-<summary>Answer</summary>
-
-**Reasoning models** (e.g. OpenAI's o-series, DeepSeek-R1, and "extended thinking" modes in Claude and Gemini) generate a long internal **chain of thought** before answering, exploring and checking approaches. They're trained largely with **reinforcement learning on verifiable rewards** (math answers, passing code tests).
-
-**Test-time compute** – spending more computation at inference (longer thinking, multiple samples with voting or verification) improves accuracy on hard problems like maths, coding and planning, at the cost of **latency and tokens**. Engineering choice: use reasoning modes for complex tasks, fast non-reasoning models for simple, latency-sensitive ones; many APIs let you set a thinking budget.
-
-</details>
-### 10. What is extended (adaptive) thinking, from a user's point of view?
+### 9. What is extended (adaptive) thinking, from a user's point of view?
 
 <details>
 <summary>Answer</summary>
@@ -124,7 +114,7 @@ Use more effort for multi-step reasoning, coding, maths, planning and agentic wo
 
 </details>
 
-### 11. What are multimodal LLMs?
+### 10. What are multimodal LLMs?
 
 <details>
 <summary>Answer</summary>
@@ -132,7 +122,7 @@ Use more effort for multi-step reasoning, coding, maths, planning and agentic wo
 Models that accept (and sometimes produce) more than text: images, audio, video, documents. Typical architecture: modality encoders (e.g. a vision transformer) whose outputs are projected into the LLM's token space, or models trained natively on interleaved multimodal data. Uses: document and screenshot understanding, visual Q&A, speech assistants with real-time voice, UI-operating agents. Engineering considerations: images and audio consume many tokens (cost), resolution trade-offs, and hallucinated visual details.
 
 </details>
-### 12. What is in-context learning?
+### 11. What is in-context learning?
 
 <details>
 <summary>Answer</summary>
@@ -140,7 +130,7 @@ Models that accept (and sometimes produce) more than text: images, audio, video,
 The ability of LLMs to perform a new task from **instructions and examples in the prompt**, without any weight updates. Few-shot examples demonstrate format and behaviour; the model infers the pattern. This emerged with scale (GPT-3) and is why prompting can replace task-specific training for many problems. Limits: examples consume context tokens, results are sensitive to example choice and order, and complex or highly specialised tasks may still need fine-tuning.
 
 </details>
-### 13. How is a modern chat LLM trained, end to end?
+### 12. How is a modern chat LLM trained, end to end?
 
 <details>
 <summary>Answer</summary>
@@ -163,18 +153,7 @@ flowchart TD
 See [Fine-Tuning & Alignment](16-choosing-models.md).
 
 </details>
-### 14. What's the difference between a base model and an instruct/chat model?
-
-<details>
-<summary>Answer</summary>
-
-- A **base model** (pretrained only) continues text: given "What is the capital of France?" it might continue with more quiz questions rather than answering. It's useful for fine-tuning, research, completion-style tasks and few-shot prompting.
-- An **instruct/chat model** has been fine-tuned (SFT + preference tuning) to follow instructions in a conversation format with roles, answer helpfully, refuse unsafe requests and use tools.
-
-Chat models expect their specific **chat template** (special tokens marking system/user/assistant turns); formatting prompts incorrectly for open-weight models degrades quality.
-
-</details>
-### 15. Why do LLMs struggle with counting letters, arithmetic and some simple tasks?
+### 13. Why do LLMs struggle with counting letters, arithmetic and some simple tasks?
 
 <details>
 <summary>Answer</summary>
@@ -187,7 +166,7 @@ Chat models expect their specific **chat template** (special tokens marking syst
 Mitigations: chain-of-thought or reasoning models, **tool use** (calculator, code execution) for exact computation, and structured approaches (spell the word out first). This is also a good reason to keep deterministic logic in code.
 
 </details>
-### 16. What are LLMs good at, and where are they weak?
+### 14. What are LLMs good at, and where are they weak?
 
 <details>
 <summary>Answer</summary>
@@ -206,7 +185,7 @@ The practical rule: give the model the information it needs, give it tools for e
 
 </details>
 
-### 17. What is sycophancy in LLMs, and why does it matter?
+### 15. What is sycophancy in LLMs, and why does it matter?
 
 <details>
 <summary>Answer</summary>
@@ -214,15 +193,7 @@ The practical rule: give the model the information it needs, give it tools for e
 The tendency of models to **agree with the user** or tell them what they want to hear – changing a correct answer when the user pushes back, praising flawed work, confirming false beliefs. It partly comes from preference training (people rate agreeable answers highly). It matters for coding, medical, legal and educational uses where honest disagreement is essential. Mitigations: training data and rewards that value honesty, prompts that ask for critical evaluation, and evaluations that test whether answers change under social pressure.
 
 </details>
-### 18. What are logits and log probabilities, and how are they useful?
-
-<details>
-<summary>Answer</summary>
-
-**Logits** are the raw scores the model outputs for each vocabulary token; softmax turns them into probabilities. Some APIs return **log probabilities** of generated tokens. Uses: a rough **confidence** signal (low probability on key tokens suggests uncertainty), classification by comparing the probabilities of label tokens, detecting likely hallucinations, and calibrating thresholds. Probabilities from instruction-tuned models are often poorly calibrated, so validate before relying on them.
-
-</details>
 
 ---
 
-[⬅ Previous: AI Interviews: Roles & Rounds](01-ai-interviews-overview.md) · [⬅ Back to index](../README.md) · [Next: AI Fluency: Working Effectively With AI ➡](03-ai-fluency.md)
+[⬅ Previous: AI in Software Engineering Interviews](01-ai-interviews-overview.md) · [⬅ Back to index](../README.md) · [Next: AI Fluency: Working Effectively With AI ➡](03-ai-fluency.md)

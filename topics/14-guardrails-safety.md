@@ -131,15 +131,7 @@ Key risks highlighted by OWASP's list for LLM applications:
 - **Unbounded consumption** (cost/denial-of-service through expensive requests).
 
 </details>
-### 11. Can LLMs leak training data?
-
-<details>
-<summary>Answer</summary>
-
-Yes – models can **memorise** and regurgitate rare sequences (emails, keys, copyrighted passages), especially if duplicated in training data. Extraction attacks prompt the model to reproduce them. Mitigations: deduplicate and filter PII/secrets from training data, differential privacy where feasible, output filters for PII and verbatim copying, and testing for memorisation. Fine-tuning on private data raises the same risk for anyone who can query the model.
-
-</details>
-### 12. What is red-teaming for AI systems?
+### 11. What is red-teaming for AI systems?
 
 <details>
 <summary>Answer</summary>
@@ -147,7 +139,7 @@ Yes – models can **memorise** and regurgitate rare sequences (emails, keys, co
 Systematically trying to make the system fail or cause harm before attackers or users do: jailbreaks, prompt injection through documents and tools, extracting system prompts or private data, eliciting biased or dangerous content, abusing agent tools, and cost attacks. Combine human experts (domain and security), automated attack generation (LLMs attacking LLMs), and regression suites of past attacks. Findings feed into guardrails, training data and policies; repeat after every major change.
 
 </details>
-### 13. Where do humans need to stay in the loop?
+### 12. Where do humans need to stay in the loop?
 
 <details>
 <summary>Answer</summary>
@@ -156,7 +148,7 @@ Wherever errors are costly or accountability matters: medical, legal and financi
 
 </details>
 
-### 14. What is overreliance on AI, and how do product designers counter it?
+### 13. What is overreliance on AI, and how do product designers counter it?
 
 <details>
 <summary>Answer</summary>
@@ -165,7 +157,7 @@ Users trusting AI output more than it deserves – accepting wrong answers becau
 
 </details>
 
-### 15. How do you detect hallucinations at runtime, before users see them?
+### 14. How do you detect hallucinations at runtime, before users see them?
 
 <details>
 <summary>Answer</summary>
@@ -180,7 +172,7 @@ Each check adds latency and cost, so apply them in proportion to the stakes of t
 
 </details>
 
-### 16. How can an LLM app leak data through links or images in its output, and how do you prevent it?
+### 15. How can an LLM app leak data through links or images in its output, and how do you prevent it?
 
 <details>
 <summary>Answer</summary>

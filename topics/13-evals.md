@@ -205,17 +205,7 @@ Use the same eval set and grading; run multiple samples per input; report metric
 - Sample human verification to calibrate the automated checks.
 
 </details>
-### 17. What are the well-known public benchmarks, and how much should you trust them?
-
-<details>
-<summary>Answer</summary>
-
-Examples: **MMLU / MMLU-Pro** (knowledge across subjects), **GPQA** (hard science questions), **GSM8K / MATH / AIME** (maths), **HumanEval / LiveCodeBench / SWE-bench** (coding), **Chatbot Arena** (crowdsourced pairwise preferences), long-context and tool-use benchmarks, and newer very hard sets (e.g. Humanity's Last Exam).
-
-Limitations: **contamination** (test questions leaked into training data), saturation (top models all score near the ceiling), and mismatch with your use case. Treat them as rough signals; decide using your own evals.
-
-</details>
-### 18. What is "vibe checking", and why is it not enough?
+### 17. What is "vibe checking", and why is it not enough?
 
 <details>
 <summary>Answer</summary>
@@ -223,7 +213,7 @@ Limitations: **contamination** (test questions leaked into training data), satur
 Trying a handful of prompts by hand and judging whether outputs "feel right". It's useful early for exploration, but it misses regressions, covers few cases, and is biased by recent examples. Mature teams move quickly to a systematic eval set, tracked metrics and automated runs – while still reading real outputs regularly, because metrics can miss issues.
 
 </details>
-### 19. What should you log and trace in an LLM application?
+### 18. What should you log and trace in an LLM application?
 
 <details>
 <summary>Answer</summary>
@@ -231,7 +221,7 @@ Trying a handful of prompts by hand and judging whether outputs "feel right". It
 Per request: user/session IDs (pseudonymised), prompt template and version, model and parameters, full input context (or references to it), retrieved documents and scores, each tool call with arguments and results, outputs, latency per step, token counts and cost, errors, and user feedback. Use tracing tools (OpenTelemetry-based or LLM-specific platforms such as Langfuse, LangSmith, Arize Phoenix). Respect privacy: redact PII, set retention limits, restrict access.
 
 </details>
-### 20. How do you use evals to improve a prompt without overfitting?
+### 19. How do you use evals to improve a prompt without overfitting?
 
 <details>
 <summary>Answer</summary>
@@ -240,7 +230,7 @@ Split your test set: iterate on a **development** set, and check final candidate
 
 </details>
 
-### 21. How do you evaluate a multi-turn chatbot?
+### 20. How do you evaluate a multi-turn chatbot?
 
 <details>
 <summary>Answer</summary>
@@ -252,7 +242,7 @@ Split your test set: iterate on a **development** set, and check final candidate
 
 </details>
 
-### 22. Which metrics would you use to evaluate a summarisation feature?
+### 21. Which metrics would you use to evaluate a summarisation feature?
 
 <details>
 <summary>Answer</summary>

@@ -2,7 +2,7 @@
 
 [⬅ Back to index](../README.md)
 
-Covers: what MCP is and why it exists, hosts, clients and servers, tools vs resources vs prompts, transports, building and testing a server, implementing a client, sampling, notifications and roots, authentication, MCP vs direct tools vs skills, remote servers in the API, and security.
+Covers: what MCP is and why it exists, hosts, clients and servers, tools vs resources vs prompts, transports, building and testing a server, implementing a client, MCP vs direct tools vs skills, and security.
 
 ---
 
@@ -116,19 +116,7 @@ It connects to one or more servers, lists their tools/resources/prompts, **conve
 
 </details>
 
-### 8. What are sampling, notifications and roots in MCP?
-
-<details>
-<summary>Answer</summary>
-
-- **Sampling** – lets a **server ask the client's model** to generate text (with user approval), so servers can use AI without their own API keys.
-- **Notifications / progress / logging** – servers can send progress updates for long operations, log messages, and change notifications (e.g. the tool list changed).
-- **Roots** – the client tells the server which locations (e.g. folders) it's allowed to work in, scoping filesystem access.
-- **Elicitation** – a server can request structured input from the user mid-operation.
-
-</details>
-
-### 9. When should you use MCP vs defining tools directly vs skills?
+### 8. When should you use MCP vs defining tools directly vs skills?
 
 <details>
 <summary>Answer</summary>
@@ -139,7 +127,7 @@ It connects to one or more servers, lists their tools/resources/prompts, **conve
 
 </details>
 
-### 10. What are the main security risks with MCP servers?
+### 9. What are the main security risks with MCP servers?
 
 <details>
 <summary>Answer</summary>

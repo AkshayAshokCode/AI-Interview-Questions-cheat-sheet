@@ -2,127 +2,118 @@
 
 [⬅ Back to index](../README.md)
 
-Covers: how AI labs, big tech, AI startups and Indian companies interview for AI-application roles; the most-asked questions; last-week preparation; and current trends (agents, MCP and skills, reasoning and effort controls, AI coding tools, long context and caching, on-device models, evaluation and governance).
+Covers: how big tech, product companies, Indian companies and startups ask software engineers about AI; AI-allowed coding rounds; the most-asked AI questions for engineers; the trends worth knowing (coding agents, MCP and skills, long context and caching, on-device AI, AI features in apps); and talking about your own AI use.
+
+> These come from commonly reported interview experiences and change often. Use them to prepare for the **style** of questions, not as a guaranteed list.
 
 ---
 
-### 1. What do AI labs (Anthropic, OpenAI, Google DeepMind) ask for applied AI and AI engineering roles?
+### 1. How do big tech companies ask software engineers about AI?
 
 <details>
 <summary>Answer</summary>
 
-**Commonly reported** – practical coding (realistic engineering tasks, sometimes in multiple timed stages), AI application design (how you'd build and evaluate an assistant, agent or integration), deep understanding of their own platform's capabilities (tools, context management, evals, safety features), customer-facing communication for solutions roles, and strong interest in **safety and responsible deployment**. Expect to discuss trade-offs honestly and how you'd measure success.
-
-**Tip** – build something real with their API (an agent, an MCP server, an eval suite) and be ready to discuss what failed and how you fixed it.
+- **Behavioral / hiring-manager rounds** – "How do you use AI tools in your work?", "Tell me about a time AI-generated code caused a problem", "How do you ensure quality when using AI?"
+- **System design** – AI features inside familiar products: a smart reply or summarisation feature, an in-app assistant, AI-powered search, a support bot – with emphasis on latency, cost, privacy and failure handling.
+- **Coding** – mostly classic coding rounds; some companies have started allowing or providing AI assistants in certain rounds, where they assess how you work with the AI. Ask the recruiter which format you'll get.
+- **Platform roles** (Android/iOS) – questions about on-device AI vs cloud, streaming UIs, and privacy (e.g. Gemini Nano on Android, Apple's Foundation Models framework on iOS – see the Android and iOS repos).
 
 </details>
 
-### 2. What do big tech companies ask for AI engineering roles?
+### 2. How do Indian product companies ask engineers about AI?
 
 <details>
 <summary>Answer</summary>
 
-- **Google, Meta, Microsoft, Amazon** – DSA coding plus AI application design: RAG over enterprise data, AI assistants inside their products (Copilot-style features, shopping assistants, support bots), evaluation at scale, latency and cost, responsible AI reviews. Amazon adds Leadership Principles in every round.
-- **Apple** – privacy-preserving and on-device AI, product quality and UX.
-- Increasingly, interviews ask **how you use AI coding tools** in your own work, and some allow them during the interview – ask beforehand.
-
-</details>
-
-### 3. What do AI startups and AI-native companies ask?
-
-<details>
-<summary>Answer</summary>
-
-Usually a **build exercise** (a small RAG app, agent or integration with evals in a few hours), a product-oriented design round, debugging scenarios (hallucinations, slow responses, cost blow-ups), and general engineering. They look for people who ship quickly **and** measure quality. A public project with an eval report stands out.
-
-</details>
-
-### 4. What do Indian companies ask for AI-application roles?
-
-<details>
-<summary>Answer</summary>
-
-| Company type | Commonly reported focus |
+| Company type | Typical AI angle for engineers |
 |---|---|
-| **E-commerce (Flipkart, Meesho, Myntra)** | Shopping assistants, search with LLM query understanding (multilingual, transliterated queries), catalogue enrichment, review summarisation |
-| **Food/quick commerce (Swiggy, Zomato, Zepto)** | Support automation with tools (order status, refunds), menu and catalogue generation, conversational ordering |
-| **Fintech (PhonePe, Paytm, Razorpay, CRED)** | Support agents with strict guardrails, document extraction (KYC), compliance, fraud-related summarisation |
-| **IT services and consultancies** | Building RAG and agent solutions for clients, evaluation, governance, cost estimation, client communication |
-| **Indian AI companies (Sarvam AI, Krutrim and others)** | Indic-language applications, voice assistants, evaluation across languages |
+| **E-commerce (Flipkart, Meesho, Myntra)** | AI search and shopping assistants, review summaries, multilingual/transliterated queries, catalogue tools |
+| **Food & quick commerce (Swiggy, Zomato, Zepto)** | Support bots that check orders and start refunds via tools, AI-generated menu/catalogue content |
+| **Fintech (PhonePe, Paytm, Razorpay, CRED)** | Support assistants with strict guardrails, document (KYC) extraction, privacy and compliance |
+| **SaaS & product startups** | Building AI features end to end, AI usage in the dev workflow, cost control |
 
-Common rounds: coding, an AI solution design case study, a build exercise, and a project deep dive.
+Expect "how would you add an AI feature to our app?" design questions and "how do you use AI coding tools?" discussions, alongside the usual rounds.
 
 </details>
 
-### 5. Which questions come up most in AI-application interviews?
+### 3. What do startups and AI-native companies ask engineers?
 
 <details>
 <summary>Answer</summary>
 
-1. Tokens, context windows, temperature, and why outputs vary → [02](02-how-llms-work.md)
-2. Why hallucinations happen and how to reduce them → [02](02-how-llms-work.md), [14](14-guardrails-safety.md)
-3. How to write a good prompt; XML tags; examples; chain-of-thought → [04](04-prompt-engineering.md)
-4. Managing context and memory → [05](05-context-engineering.md)
-5. Getting reliable structured output → [06](06-structured-outputs.md)
-6. How tool use works; designing tools → [08](08-tool-use.md)
-7. What MCP is; tools vs resources vs prompts → [09](09-mcp.md)
-8. Design a RAG system; chunking; hybrid search; reranking; contextual retrieval → [10](10-rag-search.md)
-9. Workflows vs agents; workflow patterns; when to build an agent → [11](11-agents-workflows.md)
-10. How you use AI coding tools effectively and safely → [12](12-ai-coding-assistants.md)
-11. How to evaluate an LLM feature; LLM-as-judge → [13](13-evals.md)
-12. Prompt injection and guardrails → [14](14-guardrails-safety.md)
-13. Reducing cost and latency; prompt caching → [15](15-efficiency-cost-latency.md)
-14. Prompting vs RAG vs fine-tuning; choosing a model → [16](16-choosing-models.md)
-15. Design an AI feature end to end → [20](20-ai-system-design.md)
+Often a **practical build** – add an AI feature to a small app or build a mini tool with an LLM API in a few hours – followed by discussion of trade-offs: prompt design, structured outputs, error handling, cost, how you tested it. They also expect fluent use of AI coding tools, and care that you **ship quickly and verify carefully**.
 
 </details>
 
-### 6. How should you prepare in the last week before an AI interview?
+### 4. Which AI questions come up most for software engineers?
+
+<details>
+<summary>Answer</summary>
+
+1. How do you use AI in your work, and how do you verify its output? → [01](01-ai-interviews-overview.md), [03](03-ai-fluency.md)
+2. What are tokens, context windows and temperature? Why do outputs vary? → [02](02-how-llms-work.md)
+3. Why do LLMs hallucinate, and how do you reduce it? → [02](02-how-llms-work.md), [14](14-guardrails-safety.md)
+4. How do you write a good prompt? → [04](04-prompt-engineering.md)
+5. How do you get reliable JSON out of a model? → [06](06-structured-outputs.md)
+6. How should an app call an LLM safely (keys, streaming, limits)? → [07](07-building-with-llm-apis.md)
+7. What is tool use / function calling? → [08](08-tool-use.md)
+8. What is MCP? → [09](09-mcp.md)
+9. What is RAG, and when would you use it? → [10](10-rag-search.md)
+10. What's the difference between a workflow and an agent? → [11](11-agents-workflows.md)
+11. How do you use AI coding assistants effectively and safely? → [12](12-ai-coding-assistants.md)
+12. How do you test or evaluate an AI feature? → [13](13-evals.md)
+13. What is prompt injection, and how do you defend against it? → [14](14-guardrails-safety.md)
+14. How do you control the cost and latency of an AI feature? → [15](15-efficiency-cost-latency.md)
+15. Design an AI feature for an app. → [20](20-ai-system-design.md)
+
+</details>
+
+### 5. How should you talk about using AI tools in your own work?
+
+<details>
+<summary>Answer</summary>
+
+Be concrete: which tools you use, for which tasks, how you give them context (project instruction files, examples, plans), how you verify results (tests, review, docs), where you deliberately don't use them, and a measurable outcome. Show that AI makes you faster **and** that you remain accountable for quality – the 4D framework (Delegation, Description, Discernment, Diligence) is a good structure. See [AI Fluency](03-ai-fluency.md).
+
+</details>
+
+### 6. What are the biggest AI trends software engineers should know about?
+
+<details>
+<summary>Answer</summary>
+
+- **Coding agents** that read codebases, edit files, run tests and work for long periods in terminals, IDEs and CI.
+- **MCP** – a standard way to connect AI tools to systems (issue trackers, databases, docs), and **skills** that package team know-how for agents.
+- **Long context and prompt caching** – models handle very large inputs, and caching makes repeated context cheap.
+- **Adaptive thinking and effort controls** – trading speed and cost against depth per request.
+- **AI features inside every app** – assistants, summarisation, smart search, and agents that take actions through tools.
+- **On-device AI** – small models on phones and laptops for private, offline features.
+- **Evaluation and governance** – teams treat evals like tests, and companies adopt AI policies (and regulation such as the EU AI Act).
+
+Because this moves fast, check recent announcements from the major AI providers and your target company before interviews.
+
+</details>
+
+### 7. How should you prepare for AI questions at a specific company?
+
+<details>
+<summary>Answer</summary>
+
+Use the company's product and look for its AI features (or obvious places AI could help); read its engineering blog posts about AI; find out which AI tools its engineers use (job descriptions often say); and prepare one design answer for an AI feature in its product plus your personal "how I use AI" story. Ask the recruiter whether AI tools are allowed in the coding rounds.
+
+</details>
+
+### 8. What should you do in the last week before the interview?
 
 <details>
 <summary>Answer</summary>
 
 - **Days 1–2** – the most-asked list above and the README one-liners.
-- **Day 3** – build or polish a small project: tool use + RAG + an eval set; know its numbers.
-- **Day 4** – an AI system design mock out loud.
-- **Day 5** – scenarios (topic 21) and guardrails; read the company's AI product announcements.
-- **Day 6** – project deep dive and behavioral stories.
+- **Day 3** – make a few API calls yourself (chat, tool call, streaming) or build a tiny AI feature.
+- **Day 4** – use a coding agent on a real task and note what worked and what didn't.
+- **Day 5** – one AI feature design out loud, plus scenarios (topic 21).
+- **Day 6** – your "how I use AI" story and behavioral examples.
 - **Day 7** – light review and rest.
-
-</details>
-
-### 7. Why are agents, MCP and skills such big trends?
-
-<details>
-<summary>Answer</summary>
-
-Models became reliable enough at multi-step tool use to complete real tasks – coding, research, operations. **MCP** standardised connecting AI applications to tools and data, so integrations are reusable across apps. **Skills** package know-how (instructions, scripts, templates) that agents load on demand. Together they shift work from "chat with an AI" to "delegate a task to an AI that uses your tools". Interview angles: when agents are justified, reliability and evaluation, security and permissions, and cost.
-
-</details>
-
-### 8. What other recent developments should you know?
-
-<details>
-<summary>Answer</summary>
-
-- **Adaptive thinking and effort controls** replacing fixed thinking budgets.
-- **Long context (up to around a million tokens) with prompt caching**, changing when RAG is needed.
-- **Context management features** – compaction, context editing, memory tools.
-- **AI coding agents** working autonomously for long periods, in terminals, IDEs and CI.
-- **Hosted/managed agents** with sandboxes, scheduling and persisted configurations.
-- **On-device models** for private, offline features.
-- **Evaluation as a core discipline**, and **governance** (EU AI Act obligations, enterprise AI policies).
-
-Because this field moves fast, check the latest model and platform announcements before interviews.
-
-</details>
-
-### 9. How should you talk about using AI tools in your own work?
-
-<details>
-<summary>Answer</summary>
-
-Be concrete: which tools you use, for what tasks, how you give them context (project instruction files, skills, examples), how you verify results (tests, review, sources), where you don't use them, and a measurable outcome. Interviewers want to see that AI makes you faster **and** that you remain accountable for quality – the 4D framework (Delegation, Description, Discernment, Diligence) is a good structure for this answer. See [AI Fluency](03-ai-fluency.md).
 
 </details>
 

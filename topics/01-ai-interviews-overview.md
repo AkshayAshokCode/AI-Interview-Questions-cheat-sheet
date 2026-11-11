@@ -1,126 +1,134 @@
-# AI Interviews: Roles & Rounds
+# AI in Software Engineering Interviews
 
 [⬅ Back to index](../README.md)
 
-Covers: the roles that use AI (AI engineer, applied AI engineer, AI-native developer, solutions engineer), what each interview loop contains, how answers are scored, how to talk about AI projects, and a preparation plan.
+Covers: why software engineering interviews now include AI questions, the kinds of questions asked, answering "how do you use AI?", AI-allowed coding rounds, what AI knowledge a software engineer is expected to have (and what isn't expected), talking about AI features you've built, opinion questions, common mistakes, and a preparation plan.
 
 ---
 
-### 1. Which roles focus on using AI rather than building models, and what do they do?
+### 1. Why do software engineering interviews now ask about AI?
 
 <details>
 <summary>Answer</summary>
 
-| Role | What they do | Interview emphasis |
-|---|---|---|
-| **AI engineer / LLM application engineer** | Builds products on top of foundation models: prompts, RAG, tools, agents, evals | Prompting, context, tool use, RAG, agents, evals, guardrails, cost/latency, system design, solid software engineering |
-| **Applied AI / solutions engineer** | Helps customers or internal teams design and ship AI solutions | Use-case scoping, prompting, architecture choices, evals, communication |
-| **AI-native software engineer** (any engineering role today) | Uses AI coding assistants and agents daily to ship faster | Effective use of tools like Claude Code, reviewing AI output, testing, security |
-| **AI product manager** | Decides what AI features to build and how to measure them | AI capabilities and limits, UX, evaluation, risk, cost |
-| **Prompt / conversation designer** | Designs assistant behaviour, prompts and conversation flows | Prompt craft, evaluation, safety, tone |
+Because AI has changed day-to-day engineering. Most teams use AI coding assistants, and many products now include AI features (chat assistants, smart search, summaries, recommendations, support bots). Interviewers want to know whether you:
+- **use AI tools effectively and responsibly** to work faster without lowering quality,
+- **understand AI well enough** to build features on top of LLM APIs and explain their limits,
+- can reason about **risks** – hallucinations, security, privacy, cost.
 
-These roles care about **how to get reliable, safe, cost-effective results from models** – not how to train them. (Model-building roles – ML engineers, research scientists – are a different track.)
+This is expected of Android, iOS, backend, frontend and full-stack engineers – not just "AI engineers". You don't need machine-learning maths for it.
 
 </details>
 
-### 2. What rounds does an AI engineer interview usually include?
+### 2. What kinds of AI questions do software engineers get asked?
 
 <details>
 <summary>Answer</summary>
 
-- **Coding** – general software engineering, often practical (APIs, async code, data handling), sometimes with AI tools allowed.
-- **AI fundamentals** – rapid questions on tokens, context windows, temperature, hallucinations, prompting, RAG, tool use, evals.
-- **Build exercise / take-home** – e.g. build a small RAG or agent app with an evaluation set, then discuss trade-offs.
-- **AI system design** – design an AI feature end to end: model choice, prompts, retrieval, tools, guardrails, evals, cost and latency. See [AI System Design](20-ai-system-design.md).
-- **Scenarios** – "the chatbot hallucinates", "costs tripled", "the agent loops". See [Scenarios](21-scenario-based.md).
-- **Project deep dive** and **behavioral** – what you built, how you measured it, what went wrong.
+- **Your AI usage** – "How do you use AI in your work?", "How do you make sure AI-generated code is correct?"
+- **Fundamentals** – tokens, context windows, temperature, hallucinations, why outputs vary. See [How LLMs Work](02-how-llms-work.md).
+- **Prompting and context** – how you'd get reliable output. See [Prompt Engineering](04-prompt-engineering.md).
+- **Building AI features** – calling an LLM API from your app, streaming, tool use, RAG, structured outputs. See [Building With LLM APIs](07-building-with-llm-apis.md).
+- **Quality and risk** – how you'd test an AI feature, prevent prompt injection, protect user data, control cost.
+- **Design** – "Add an AI assistant to our app" as a system design or product question. See [AI System Design](20-ai-system-design.md).
+- **Opinion** – "How is AI changing software engineering?"
 
 </details>
 
-### 3. How are answers scored in AI-engineering interviews?
+### 3. How should you answer "How do you use AI in your day-to-day work?"
 
 <details>
 <summary>Answer</summary>
 
-- **Practical judgement** – choosing the simplest approach that works (a good prompt before RAG, RAG before fine-tuning, a workflow before an agent).
-- **Evaluation mindset** – every claim of "it works" is backed by an eval set and metrics.
-- **Reliability and safety** – handling hallucinations, prompt injection, failures, human oversight.
-- **Cost and latency awareness** – tokens, caching, model choice, streaming.
-- **Clear communication** – explaining limitations honestly to users and stakeholders.
+Be concrete and show judgement. A good structure (based on the AI Fluency 4Ds – see [AI Fluency](03-ai-fluency.md)):
+1. **What you delegate** – e.g. "boilerplate, tests, exploring unfamiliar code, first drafts of docs, debugging with stack traces".
+2. **How you describe tasks** – context, constraints, project instruction files, examples, plan-first for bigger changes.
+3. **How you check results** – tests, reading every diff, verifying APIs against docs.
+4. **Where you don't use it, and why** – security-sensitive code without review, confidential data, decisions you must own.
+5. **An outcome** – "cut the time to add a new screen from two days to one, with test coverage going up".
 
-Naming frameworks or the newest model scores less than showing how you'd **measure and iterate**.
+Avoid both extremes: "I don't use AI" (sounds out of date) and "AI writes all my code" (sounds like you don't own the result).
 
 </details>
 
-### 4. How should you approach an open-ended "build an AI feature for X" question?
+### 4. What happens in an AI-allowed coding interview, and how should you behave?
 
 <details>
 <summary>Answer</summary>
 
-```mermaid
-flowchart TD
-    G["1. Goal + users + success metric"] --> F["2. Is AI the right tool?<br/>what to delegate, what stays human"]
-    F --> S["3. Simplest version: one prompt<br/>(+ examples, + context)"]
-    S --> E["4. Build a small eval set<br/>and measure"]
-    E --> A["5. Add only what's needed:<br/>retrieval, tools, workflow, agent"]
-    A --> GR["6. Guardrails + human oversight"]
-    GR --> C["7. Cost, latency, monitoring, rollout"]
-```
-
-The most common mistake is jumping straight to "I'd build a multi-agent system" without a metric, an eval set or a baseline prompt.
+Some companies now allow (or provide) AI assistants in coding rounds, and others ban them – **ask the recruiter beforehand** and never use AI where it isn't allowed. When it's allowed, interviewers assess how you **work with** the AI, not whether it can solve the problem:
+- Understand and plan the problem yourself first; explain your approach.
+- Give the AI clear, scoped requests rather than pasting the whole problem.
+- **Read and explain every line** it produces; catch its mistakes out loud.
+- Test the code (edge cases, complexity) and fix issues yourself.
+- Stay in control – you should be able to continue if the tool disappeared.
 
 </details>
 
-### 5. How do you present an AI project in a deep-dive round?
+### 5. What AI knowledge is a software engineer expected to have – and not expected to have?
 
 <details>
 <summary>Answer</summary>
 
-1. **Problem and impact** – the user problem and the metric that mattered.
-2. **Approach** – the baseline prompt, what you added (retrieval, tools, workflow) and why.
-3. **Evaluation** – how you built the eval set, how you graded, key numbers before/after.
-4. **Failure modes** – hallucinations, edge cases, prompt injection – and how you handled them.
-5. **Production** – cost per request, latency, caching, monitoring, rollout.
-6. **What you'd do differently.**
+**Expected:**
+- How LLMs behave: tokens, context windows, sampling, hallucinations, knowledge cutoff, statelessness.
+- Effective prompting and giving context; structured outputs.
+- How to call an LLM API safely from an app: backend proxy, streaming, errors, rate limits, cost.
+- Tool use / function calling, RAG and agents at a conceptual level; what MCP is.
+- How to use AI coding assistants well and review their output.
+- Testing and evaluating AI features; guardrails, privacy and security basics.
 
-Expect follow-ups like "how did you know it was better?" and "what happens when the model is wrong?".
+**Not expected** (unless the role is ML-specific): training models, backpropagation, transformer maths, statistics and probability theory, GPU optimisation.
 
 </details>
 
-### 6. How much do you need to know about how models work internally?
+### 6. How do you talk about an AI feature you built (or haven't built yet)?
 
 <details>
 <summary>Answer</summary>
 
-For AI-usage roles, enough to **predict behaviour and explain limitations**: tokens and context windows, next-token generation and sampling, why hallucinations happen, knowledge cutoffs, statelessness, what extended thinking does, and roughly how models are trained to follow instructions. You don't need to derive backpropagation or attention maths. See [How LLMs Work](02-how-llms-work.md).
+If you've built one: the user problem, the approach (prompt, context/RAG, tools), how you tested quality (an eval set, user feedback), how you handled failures (hallucinations, refusals, timeouts), cost and latency numbers, and what you'd improve.
+
+If you haven't: build a small one before interviews – e.g. a feature in your app that summarises or answers questions over your own data via an LLM API, with streaming, a few tool calls and a 20-case test set. Being able to describe real problems you hit is far more convincing than theory.
 
 </details>
 
-### 7. What are common mistakes in AI-engineering interviews?
+### 7. How should you answer "Will AI replace software engineers?" or "How is AI changing engineering?"
 
 <details>
 <summary>Answer</summary>
 
-- Over-engineering (agents and fine-tuning for problems a good prompt solves).
-- No evaluation plan ("I'd test it a bit").
-- Ignoring cost and latency, or prompt injection and data privacy.
-- Treating model output as correct without verification or human review where it matters.
-- Vague prompting advice ("be clear") without concrete techniques (examples, XML structure, output formats).
-- Not knowing the difference between workflows and agents, or RAG and fine-tuning.
+Give a balanced, experience-based answer: AI is automating more of the **writing** of code (boilerplate, tests, migrations), which shifts engineers' value towards **understanding problems, designing systems, specifying work clearly, reviewing and verifying, and owning quality, security and outcomes**. Engineers who use AI well become more productive; those who accept output uncritically create risk. Mention what you've seen in practice and how you're adapting (e.g. writing better specs, investing in tests, reviewing more carefully).
 
 </details>
 
-### 8. How should you prepare in 2–4 weeks?
+### 8. What are common mistakes when discussing AI in interviews?
 
 <details>
 <summary>Answer</summary>
 
-1. **Week 1** – foundations and prompting: topics 02–06; practise rewriting weak prompts.
-2. **Week 2** – building: topics 07–11; build a small app with tool use and RAG.
-3. **Week 3** – quality and operations: topics 12–17; add an eval set, guardrails, caching; use an AI coding assistant on a real project.
-4. **Week 4** – topics 18–22, two mock AI system design interviews, and scenarios out loud.
+- Over-claiming ("AI does everything for me") or dismissing it entirely.
+- No mention of verification, testing or review.
+- Casual attitude to confidential code and customer data in AI tools.
+- Buzzwords without substance (saying "RAG" or "agents" but not explaining when or why).
+- Over-engineering design answers (multi-agent systems for a simple summary feature).
+- Ignoring cost, latency, privacy and failure handling when designing AI features.
 
-The Anthropic Academy courses (AI Fluency, Building with the Claude API, Introduction to MCP, Claude Code in Action) cover much of this hands-on.
+</details>
+
+### 9. How should you prepare in 1–2 weeks?
+
+<details>
+<summary>Answer</summary>
+
+1. Read topics 02–06 (how LLMs behave, AI fluency, prompting, context, structured outputs).
+2. Make a few API calls yourself: a chat, a tool call, a streamed response (topics 07–08).
+3. Read topics 09–12 (MCP, RAG, agents, AI coding assistants) – and use a coding agent on a real task, noting what worked.
+4. Read topics 13–15 (testing/evals, guardrails, cost) – the areas interviewers use to separate strong candidates.
+5. Practise one AI feature design (topic 20) and a few scenarios (topic 21) out loud.
+6. Prepare your "how I use AI" story with concrete examples and numbers.
+
+The free Anthropic Academy courses (AI Fluency, Claude Code in Action, Building with the Claude API, Introduction to MCP) are good hands-on companions.
 
 </details>
 

@@ -109,18 +109,7 @@ BM25 ranks documents by **keyword matches**, weighting rare terms higher (invers
 Combining **keyword search (BM25)** and **vector search**. Embeddings capture meaning but can miss exact terms (product codes, names, error messages, rare jargon); BM25 nails exact matches but misses paraphrases. Run both and merge results, commonly with **Reciprocal Rank Fusion** (`score = Σ 1/(k + rank)` across result lists) or weighted score combination, then optionally rerank. Hybrid search consistently improves RAG retrieval quality.
 
 </details>
-### 9. Bi-encoders vs cross-encoders – what's a reranker?
-
-<details>
-<summary>Answer</summary>
-
-- **Bi-encoder** – embeds query and document **separately**; document vectors are precomputed, so search over millions is fast. Less precise because query and document never "see" each other.
-- **Cross-encoder** – feeds the query and document **together** through a transformer and outputs a relevance score. Much more accurate, but must run for every candidate at query time.
-
-So systems **retrieve** top 50–200 candidates with a bi-encoder (+ BM25), then **rerank** with a cross-encoder (or an LLM) and keep the top 5–10. This two-stage pattern is standard in search and RAG.
-
-</details>
-### 10. What is contextual retrieval?
+### 9. What is contextual retrieval?
 
 <details>
 <summary>Answer</summary>
@@ -129,7 +118,7 @@ A technique (described by Anthropic) for fixing chunks that lose meaning when cu
 
 </details>
 
-### 11. How do you improve retrieval quality?
+### 10. How do you improve retrieval quality?
 
 <details>
 <summary>Answer</summary>
@@ -144,7 +133,7 @@ A technique (described by Anthropic) for fixing chunks that lose meaning when cu
 - Measure **recall@k** on a labelled set after every change.
 
 </details>
-### 12. How do you build the prompt and get good citations?
+### 11. How do you build the prompt and get good citations?
 
 <details>
 <summary>Answer</summary>
@@ -156,7 +145,7 @@ A technique (described by Anthropic) for fixing chunks that lose meaning when cu
 - Post-process: map chunk IDs to links; optionally verify each cited claim against its source.
 
 </details>
-### 13. How do you handle permissions in RAG?
+### 12. How do you handle permissions in RAG?
 
 <details>
 <summary>Answer</summary>
@@ -168,7 +157,7 @@ Users must only receive information from documents they're allowed to see.
 - Keep ACLs fresh (permission changes must propagate quickly) and also re-check at display time for sensitive sources.
 
 </details>
-### 14. How do you evaluate a RAG system?
+### 13. How do you evaluate a RAG system?
 
 <details>
 <summary>Answer</summary>
@@ -181,7 +170,7 @@ Evaluate the two halves separately and end to end:
 Tools: LLM-as-judge metrics (e.g. RAGAS-style faithfulness/context precision), human review of samples, and a **golden dataset** built from real user questions (including unanswerable ones). Re-run it on every change to chunking, embeddings, prompts or models.
 
 </details>
-### 15. What are the common failure modes of RAG?
+### 14. What are the common failure modes of RAG?
 
 <details>
 <summary>Answer</summary>
@@ -198,19 +187,7 @@ Tools: LLM-as-judge metrics (e.g. RAGAS-style faithfulness/context precision), h
 Debug by looking at the retrieved chunks for failing questions: most problems are retrieval problems.
 
 </details>
-### 16. What are advanced RAG patterns?
-
-<details>
-<summary>Answer</summary>
-
-- **Multi-query / decomposition** – break a complex question into sub-questions, retrieve for each, combine.
-- **Agentic RAG** – the LLM decides when and what to search, iterates (search → read → search again), and can use several tools (vector search, SQL, web).
-- **Corrective / self-reflective RAG** – grade retrieved documents for relevance and re-search or fall back to web search when they're poor.
-- **GraphRAG** – build a knowledge graph of entities and relationships (plus community summaries) to answer global or relationship-heavy questions ("what are the main themes across all these reports?").
-- **Structured RAG / text-to-SQL** – for numerical questions, query databases instead of text chunks.
-
-</details>
-### 17. What is agentic search, and when is it better than a vector index?
+### 15. What is agentic search, and when is it better than a vector index?
 
 <details>
 <summary>Answer</summary>
@@ -219,7 +196,7 @@ Instead of a single retrieve-then-answer step, the model **searches iteratively 
 
 </details>
 
-### 18. RAG vs fine-tuning vs long context – when to use which?
+### 16. RAG vs fine-tuning vs long context – when to use which?
 
 <details>
 <summary>Answer</summary>
@@ -235,7 +212,7 @@ Instead of a single retrieve-then-answer step, the model **searches iteratively 
 They combine: a fine-tuned model that's better at using retrieved context, inside a RAG system. Fine-tuning is a poor way to add facts (it's expensive to update and the model can still hallucinate them).
 
 </details>
-### 19. How would you scale a RAG system to millions of documents and many users?
+### 17. How would you scale a RAG system to millions of documents and many users?
 
 <details>
 <summary>Answer</summary>
@@ -247,7 +224,7 @@ They combine: a fine-tuned model that's better at using retrieved context, insid
 - **Observability** – log retrieved chunks, scores, prompt versions, latency per stage and user feedback.
 
 </details>
-### 20. How do you make a RAG chatbot handle follow-up questions?
+### 18. How do you make a RAG chatbot handle follow-up questions?
 
 <details>
 <summary>Answer</summary>
@@ -255,7 +232,7 @@ They combine: a fine-tuned model that's better at using retrieved context, insid
 Use **conversational query rewriting**: before retrieval, an LLM call rewrites the latest message into a standalone query using the chat history ("And for the enterprise plan?" → "What is the refund policy for the enterprise plan?"). Pass a trimmed or summarised history to the answer model, and decide per turn whether retrieval is needed at all (small talk vs a knowledge question).
 
 </details>
-### 21. How do you handle tables, numbers and structured data in RAG?
+### 19. How do you handle tables, numbers and structured data in RAG?
 
 <details>
 <summary>Answer</summary>
@@ -263,22 +240,12 @@ Use **conversational query rewriting**: before retrieval, an LLM call rewrites t
 Text embeddings are weak at exact numbers and aggregation. Options: keep tables intact as markdown chunks with headers repeated; store structured data in a database and use **text-to-SQL** or tool calls for numeric questions ("total revenue in Q3"); summarise tables into descriptive text for retrieval while passing the raw table to the LLM; route questions by type (numeric → SQL, explanatory → document search).
 
 </details>
-### 22. What is a semantic cache, and what are its risks?
+### 20. What is a semantic cache, and what are its risks?
 
 <details>
 <summary>Answer</summary>
 
 A cache keyed by the **meaning** of a query: embed the new query and, if a previous query is similar enough (above a threshold), return its cached answer. Saves cost and latency for repeated questions (FAQs, support). Risks: returning an answer to a subtly different question (wrong threshold), stale answers after documents change (invalidate on updates), and **permission leaks** (cache per user/role or only for public content).
-
-</details>
-### 23. What does a vector database provide beyond an ANN library?
-
-<details>
-<summary>Answer</summary>
-
-Libraries (FAISS, hnswlib, ScaNN) give fast in-memory search. **Vector databases** (Pinecone, Weaviate, Milvus, Qdrant, Chroma, or extensions like **pgvector**, and search engines like Elasticsearch/OpenSearch) add: persistence, CRUD updates, **metadata storage and filtering**, hybrid keyword + vector search, horizontal scaling and replication, multi-tenancy, access control and backups.
-
-Choosing: pgvector if you already run Postgres and data fits (simple, transactional); a dedicated vector DB for very large scale or advanced features; Elasticsearch/OpenSearch if you need strong keyword search too.
 
 </details>
 

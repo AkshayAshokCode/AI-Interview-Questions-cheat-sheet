@@ -76,7 +76,7 @@ Ask for the format you need ("answer in 3 bullets", "return only the JSON"), avo
 - **Fewer tokens** – shorter prompts, fewer/better retrieved chunks, concise outputs, summarised history.
 - **Caching** – prompt (prefix) caching, exact and semantic response caching.
 - **Batch APIs** for offline work (often ~50% cheaper).
-- Self-hosting optimisations: quantisation, continuous batching, speculative decoding, high GPU utilisation.
+- If you self-host open models: smaller/quantised models and an efficient serving engine.
 - Avoid unnecessary calls (deterministic code where possible, rules before LLMs).
 
 </details>

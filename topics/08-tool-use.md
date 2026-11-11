@@ -2,7 +2,7 @@
 
 [⬅ Back to index](../README.md)
 
-Covers: how tool use works, writing tool definitions, the tool-use loop, parallel tool calls, error handling, tool choice, server-side tools (web search, web fetch, code execution), designing good tools, many tools and tool search, streaming tool inputs, programmatic tool calling, and tool security.
+Covers: how tool use works, writing tool definitions, the tool-use loop, parallel tool calls, error handling, tool choice, server-side tools (web search, web fetch, code execution), designing good tools, many tools and tool search, and tool security.
 
 ---
 
@@ -130,16 +130,7 @@ Many tool definitions consume context, add cost and make selection less accurate
 
 </details>
 
-### 10. What is programmatic tool calling?
-
-<details>
-<summary>Answer</summary>
-
-Instead of calling tools one at a time with a model round trip each, the model writes **code** (in a code-execution sandbox) that calls your tools – loops over many items, filters and aggregates results – and only the final result comes back into the context. It cuts latency, tokens and context clutter for data-heavy tool workflows (e.g. "check status for 200 orders and summarise the failures").
-
-</details>
-
-### 11. How do you secure tool use?
+### 10. How do you secure tool use?
 
 <details>
 <summary>Answer</summary>

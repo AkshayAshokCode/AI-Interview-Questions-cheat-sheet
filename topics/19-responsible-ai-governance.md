@@ -21,18 +21,7 @@ Covers: bias, fairness and inclusion, transparency and disclosure, privacy and d
 Removing a sensitive attribute isn't enough: other features (postcode, name) can act as **proxies**.
 
 </details>
-### 2. How do you mitigate bias?
-
-<details>
-<summary>Answer</summary>
-
-- **Pre-processing** – collect more representative data, re-sample or re-weight, fix labels.
-- **In-processing** – fairness constraints or adversarial debiasing during training.
-- **Post-processing** – group-specific thresholds or calibration (subject to legal constraints).
-- **Process** – evaluate metrics by slice before launch, involve domain experts and affected communities, document models (model cards, datasheets), monitor in production, and provide appeal paths for decisions about people.
-
-</details>
-### 3. When and how should you disclose AI use?
+### 2. When and how should you disclose AI use?
 
 <details>
 <summary>Answer</summary>
@@ -41,19 +30,18 @@ Tell people when they're **interacting with an AI** (chatbots, voice agents), wh
 
 </details>
 
-### 4. How do you protect privacy in ML systems?
+### 3. How do you protect privacy in ML systems?
 
 <details>
 <summary>Answer</summary>
 
 - **Data minimisation** and retention limits; remove or pseudonymise **PII** before training and logging.
 - Access control and encryption; separate environments for sensitive data.
-- **Differential privacy** – add calibrated noise (e.g. DP-SGD clips per-example gradients and adds noise) so the model can't reveal whether any individual was in the training data.
-- **Federated learning** – train on devices and share only model updates (keyboard prediction), often combined with secure aggregation and DP.
+- **Privacy-preserving techniques** some products use – on-device processing (data never leaves the phone), and approaches like federated learning and differential privacy that learn from many users without exposing any individual's data.
 - For LLM apps: don't send sensitive data to providers without agreements, use zero-retention settings, redact PII in prompts and logs, and consider on-device or self-hosted models.
 
 </details>
-### 5. What intellectual-property questions come up with AI-generated content?
+### 4. What intellectual-property questions come up with AI-generated content?
 
 <details>
 <summary>Answer</summary>
@@ -62,7 +50,7 @@ Who owns AI-assisted output (depends on jurisdiction and terms of service; purel
 
 </details>
 
-### 6. What should a workplace AI policy cover?
+### 5. What should a workplace AI policy cover?
 
 <details>
 <summary>Answer</summary>
@@ -71,7 +59,7 @@ Approved tools and plans; what data may and may not be shared; required human re
 
 </details>
 
-### 7. What decisions shape an organisation's rollout of an AI assistant?
+### 6. What decisions shape an organisation's rollout of an AI assistant?
 
 <details>
 <summary>Answer</summary>
@@ -87,7 +75,7 @@ Recording these decisions in a rollout plan avoids ad-hoc, inconsistent adoption
 
 </details>
 
-### 8. What is the EU AI Act, and how does regulation affect AI engineering?
+### 7. What is the EU AI Act, and how does regulation affect AI engineering?
 
 <details>
 <summary>Answer</summary>
@@ -101,7 +89,7 @@ The EU AI Act (adopted 2024, with obligations phasing in from 2025 onwards) regu
 Other relevant rules: GDPR (data protection, automated decision-making), sector regulations, and frameworks such as the NIST AI Risk Management Framework. Engineering impact: documentation (model cards), audit logs, evaluation evidence, human-in-the-loop design, and data governance.
 
 </details>
-### 9. How do you design an AI feature responsibly from the start?
+### 8. How do you design an AI feature responsibly from the start?
 
 <details>
 <summary>Answer</summary>
@@ -115,7 +103,7 @@ Other relevant rules: GDPR (data protection, automated decision-making), sector 
 7. Monitor, collect feedback, and have a rollback/incident process.
 
 </details>
-### 10. What is the environmental impact of AI use, and how can teams reduce it?
+### 9. What is the environmental impact of AI use, and how can teams reduce it?
 
 <details>
 <summary>Answer</summary>

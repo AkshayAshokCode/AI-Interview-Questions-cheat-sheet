@@ -2,7 +2,7 @@
 
 [⬅ Back to index](../README.md)
 
-Covers: a framework for designing AI features, then full designs: an enterprise RAG assistant, a customer-support agent, a ChatGPT-like assistant, a coding assistant, an AI search engine, document extraction, a voice assistant, content moderation, an AI meeting summariser, an internal tool-using assistant, and an LLM gateway.
+Covers: a framework for designing AI features, then full designs: an enterprise RAG assistant, a customer-support agent, a coding assistant, an AI search engine, document extraction, a voice assistant, content moderation, an AI meeting summariser, an internal tool-using assistant, and an LLM gateway.
 
 ---
 
@@ -54,22 +54,7 @@ flowchart TD
 - **Evaluation** – simulated conversations with scripted users, resolution rate, correct tool calls, policy violations, CSAT, escalation rate, cost per resolved ticket.
 
 </details>
-### 4. Design a ChatGPT-like conversational AI service.
-
-<details>
-<summary>Answer</summary>
-
-- **Client ↔ API gateway** (auth, rate limits by requests and **tokens**, plans) ↔ **chat service** (loads conversation history, builds the prompt, applies moderation) ↔ **inference router** (picks model and cluster, queues by priority) ↔ **GPU inference fleet** (continuous batching, paged KV cache, prefix caching, speculative decoding).
-- **Streaming** over SSE; cancellation frees GPU capacity.
-- **Context management** – truncate/summarise long conversations; memory features retrieve saved user facts.
-- **Tools** – web search, code execution, file analysis, image generation, executed in sandboxes.
-- **Capacity** – GPUs are the bottleneck: admission control, priority tiers, graceful "at capacity" handling, multi-region scheduling.
-- **Safety** – input/output moderation, abuse detection, policy enforcement.
-- **Storage** – conversations sharded by user; titles/summaries generated asynchronously.
-- **Metrics** – TTFT, tokens/s, error rate, cost per conversation, user ratings, retention.
-
-</details>
-### 5. Design an AI coding assistant (Copilot-style).
+### 4. Design an AI coding assistant (Copilot-style).
 
 <details>
 <summary>Answer</summary>
@@ -81,7 +66,7 @@ Two products with different constraints:
 Concerns: privacy of customer code (no training on it without consent, data retention), security (generated vulnerabilities, secret leakage, prompt injection from repository content), licence/IP filtering, and evaluation (unit-test pass rates, SWE-bench-style tasks, acceptance and retention of suggestions).
 
 </details>
-### 6. Design an AI search engine (Perplexity-style answer engine).
+### 5. Design an AI search engine (Perplexity-style answer engine).
 
 <details>
 <summary>Answer</summary>
@@ -95,7 +80,7 @@ Concerns: privacy of customer code (no training on it without consent, data rete
 Challenges: latency (parallel fetching, fast rerankers, streaming), freshness, source reliability, citation accuracy (verify claims map to cited passages), cost per query, and handling prompt injection in fetched web pages.
 
 </details>
-### 7. Design an LLM-based document extraction pipeline (invoices, forms, KYC documents).
+### 6. Design an LLM-based document extraction pipeline (invoices, forms, KYC documents).
 
 <details>
 <summary>Answer</summary>
@@ -109,7 +94,7 @@ Challenges: latency (parallel fetching, fast rerankers, streaming), freshness, s
 - **Cost/latency** – a small model for classification and simple documents, larger models for complex ones; batch processing; PII handling and retention limits.
 
 </details>
-### 8. Design a voice assistant feature (speech in, speech out).
+### 7. Design a voice assistant feature (speech in, speech out).
 
 <details>
 <summary>Answer</summary>
@@ -124,7 +109,7 @@ Key concerns:
 - **Evaluation** – word error rate, task success, latency percentiles, user satisfaction.
 
 </details>
-### 9. Design a content moderation system for a social platform.
+### 8. Design a content moderation system for a social platform.
 
 <details>
 <summary>Answer</summary>
@@ -136,7 +121,7 @@ Key concerns:
 - **Feedback loop** – reviewer decisions become training data; adversarial evasion (misspellings, image text) requires continuous updates.
 
 </details>
-### 10. Design an AI meeting summariser.
+### 9. Design an AI meeting summariser.
 
 <details>
 <summary>Answer</summary>
@@ -151,7 +136,7 @@ Key concerns:
 
 </details>
 
-### 11. Design an internal AI assistant that can use company tools (e.g. a Slack bot).
+### 10. Design an internal AI assistant that can use company tools (e.g. a Slack bot).
 
 <details>
 <summary>Answer</summary>
@@ -165,7 +150,7 @@ Key concerns:
 
 </details>
 
-### 12. Design an LLM gateway for a company.
+### 11. Design an LLM gateway for a company.
 
 <details>
 <summary>Answer</summary>
@@ -182,7 +167,7 @@ Trade-off: a central point of control and visibility vs an extra hop and a team 
 
 </details>
 
-### 13. How do you handle the scale-up of an AI feature from prototype to production?
+### 12. How do you handle the scale-up of an AI feature from prototype to production?
 
 <details>
 <summary>Answer</summary>

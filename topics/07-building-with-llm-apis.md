@@ -2,7 +2,7 @@
 
 [⬅ Back to index](../README.md)
 
-Covers: how a chat API request works, roles and multi-turn conversations, system prompts, max tokens and stop reasons, streaming, errors, retries and rate limits, API key security, SDKs, model IDs and versioning, token counting, batch processing, effort and thinking controls, and cloud platforms.
+Covers: how a chat API request works, roles and multi-turn conversations, system prompts, max tokens and stop reasons, streaming, errors, retries and rate limits, API key security, model versions, token counting, batch processing, effort and thinking controls, SDKs, cloud platforms, integrating an LLM into a mobile or web app, testing code that calls an LLM, and common first-time mistakes.
 
 ---
 
@@ -180,6 +180,57 @@ while True:
 ```
 
 Talking points: the app owns history, full content blocks are appended, stop reasons are checked, and in production you'd add streaming, history trimming/summarisation, error handling and prompt caching.
+
+</details>
+
+### 15. How should a mobile or web app integrate an LLM feature?
+
+<details>
+<summary>Answer</summary>
+
+```mermaid
+flowchart TD
+    APP["Mobile / web client"] -->|"your auth token"| BE["Your backend"]
+    BE -->|"API key (server-side only)"| LLM["LLM provider API"]
+    LLM -->|"streamed tokens"| BE
+    BE -->|"SSE / WebSocket stream"| APP
+    BE --> LOG[("Logs, usage, cost,<br/>rate limits per user")]
+```
+
+- **Never call the provider directly from the app with your API key** – keys in apps can be extracted. Route through your backend (or a secure proxy).
+- The backend adds the system prompt, context (user data, retrieved documents) and tools; enforces **per-user rate limits and quotas**; validates outputs; logs usage and cost.
+- **Stream** the response to the client (SSE or WebSocket) and render partial markdown; cancel the request when the user leaves the screen.
+- Handle errors and timeouts gracefully in the UI (retry, fallback message).
+- Consider **on-device models** for small, private or offline features, with the cloud for complex ones.
+
+</details>
+
+### 16. How do you test code that calls an LLM?
+
+<details>
+<summary>Answer</summary>
+
+Separate two concerns:
+- **Your code's logic** – unit tests with the LLM client behind an interface and replaced by a **fake or mock** returning fixed responses (including tool calls, refusals, truncated output and errors). Test parsing, validation, retries and the tool loop deterministically.
+- **The AI behaviour's quality** – an **eval suite** run against the real model on a set of inputs with graders (format checks, LLM judge, human review), run before releases and on prompt/model changes – not in every unit-test run (it's slow, costs money and is non-deterministic).
+
+Recorded real responses can serve as regression fixtures for integration tests.
+
+</details>
+
+### 17. What are common mistakes engineers make when first adding an LLM to an app?
+
+<details>
+<summary>Answer</summary>
+
+- Shipping the API key in the client.
+- No limits – a single user (or attacker) runs up a huge bill.
+- Parsing free text with regex instead of using structured outputs.
+- Ignoring stop reasons (truncated or refused responses break the UI).
+- No streaming – users stare at a spinner for 10 seconds.
+- No evaluation – "it worked on my three examples".
+- Trusting user input inside prompts (prompt injection) and model output inside actions (unsafe tool execution).
+- Logging prompts with personal data and keeping them forever.
 
 </details>
 
