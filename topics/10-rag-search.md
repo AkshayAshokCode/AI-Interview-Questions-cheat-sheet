@@ -1,8 +1,8 @@
-# Retrieval-Augmented Generation (RAG)
+# RAG & Agentic Search
 
 [⬅ Back to index](../README.md)
 
-Covers: what RAG is and why it's used, the RAG pipeline, document parsing, chunking strategies, retrieval (dense, sparse, hybrid), query rewriting and HyDE, reranking, prompt construction and citations, permissions, evaluation, common failure modes, advanced RAG (multi-hop, agentic RAG, GraphRAG), RAG vs fine-tuning vs long context, and scaling RAG in production.
+Covers: what RAG is, the pipeline, embeddings at a practical level, chunking, document parsing, lexical (BM25) vs semantic search, hybrid search and reranking, contextual retrieval, citations, permissions, evaluation, failure modes, agentic search, RAG vs fine-tuning vs long context, and scaling.
 
 ---
 
@@ -21,7 +21,6 @@ Why:
 - Cheaper than stuffing whole document sets into every prompt.
 
 </details>
-
 ### 2. Walk through a typical RAG pipeline.
 
 <details>
@@ -47,8 +46,28 @@ flowchart TD
 Each stage can fail independently, so evaluate retrieval and generation separately.
 
 </details>
+### 3. What is an embedding?
 
-### 3. How do you chunk documents, and why does chunking matter?
+<details>
+<summary>Answer</summary>
+
+A dense vector (typically 256–4,096 numbers) produced by a model so that **semantically similar inputs are close together**. Texts, images, users, products and code can all be embedded. Uses: semantic search, RAG retrieval, recommendations, clustering, deduplication, classification features and anomaly detection. Unlike keyword matching, embeddings match meaning ("cheap flights" ≈ "low-cost airfare").
+
+</details>
+### 4. How do you choose an embedding model?
+
+<details>
+<summary>Answer</summary>
+
+- **Quality on your data** – build a small retrieval test set (queries + relevant documents) and measure recall@k; public leaderboards like MTEB are a starting point only.
+- **Domain and language** – multilingual? code? legal/medical?
+- **Dimensions** – larger vectors cost more storage and search time.
+- **Max input length** – affects chunk size.
+- **Cost and latency** – API vs self-hosted; embedding millions of documents adds up.
+- **Stability** – changing the model means **re-embedding everything** (vectors from different models aren't comparable).
+
+</details>
+### 5. How do you chunk documents, and why does chunking matter?
 
 <details>
 <summary>Answer</summary>
@@ -65,8 +84,7 @@ Strategies:
 Tune chunk size on your evaluation set; there's no universal best.
 
 </details>
-
-### 4. Why is document parsing often the hardest part?
+### 6. Why is document parsing often the hardest part?
 
 <details>
 <summary>Answer</summary>
@@ -74,8 +92,44 @@ Tune chunk size on your evaluation set; there's no universal best.
 Real documents are messy: PDFs with multi-column layouts, tables, headers/footers, scanned pages, charts, slides and spreadsheets. Bad parsing (merged columns, broken tables, lost headings) produces bad chunks that no retriever can fix. Use layout-aware parsers or OCR, convert tables to structured text (markdown/JSON), keep heading hierarchy as metadata, and consider multimodal models for complex pages (or embedding page images). Inspect parsed output manually on a sample – it's usually the highest-leverage fix.
 
 </details>
+### 7. What is BM25 (lexical search), and why still use it alongside embeddings?
 
-### 5. How do you improve retrieval quality?
+<details>
+<summary>Answer</summary>
+
+BM25 ranks documents by **keyword matches**, weighting rare terms higher (inverse document frequency) and saturating repeated terms, with document-length normalisation. It excels at exact matches – product codes, error messages, names, acronyms – which embeddings can miss. Embeddings excel at meaning and paraphrases. Running both and merging results (**hybrid search**, e.g. with reciprocal rank fusion) is consistently better than either alone.
+
+</details>
+
+### 8. What is hybrid search and why use it?
+
+<details>
+<summary>Answer</summary>
+
+Combining **keyword search (BM25)** and **vector search**. Embeddings capture meaning but can miss exact terms (product codes, names, error messages, rare jargon); BM25 nails exact matches but misses paraphrases. Run both and merge results, commonly with **Reciprocal Rank Fusion** (`score = Σ 1/(k + rank)` across result lists) or weighted score combination, then optionally rerank. Hybrid search consistently improves RAG retrieval quality.
+
+</details>
+### 9. Bi-encoders vs cross-encoders – what's a reranker?
+
+<details>
+<summary>Answer</summary>
+
+- **Bi-encoder** – embeds query and document **separately**; document vectors are precomputed, so search over millions is fast. Less precise because query and document never "see" each other.
+- **Cross-encoder** – feeds the query and document **together** through a transformer and outputs a relevance score. Much more accurate, but must run for every candidate at query time.
+
+So systems **retrieve** top 50–200 candidates with a bi-encoder (+ BM25), then **rerank** with a cross-encoder (or an LLM) and keep the top 5–10. This two-stage pattern is standard in search and RAG.
+
+</details>
+### 10. What is contextual retrieval?
+
+<details>
+<summary>Answer</summary>
+
+A technique (described by Anthropic) for fixing chunks that lose meaning when cut out of their document – e.g. "Revenue grew 3% over the previous quarter" without saying which company or quarter. Before indexing, an LLM writes a **short context for each chunk** from the whole document ("This chunk is from ACME's Q2 2024 report, section on revenue…"), which is prepended to the chunk for both **embedding and BM25 indexing**. Combined with hybrid search and reranking, it substantially reduces retrieval failures. Prompt caching keeps the cost of generating contexts low (the full document is cached across its chunks).
+
+</details>
+
+### 11. How do you improve retrieval quality?
 
 <details>
 <summary>Answer</summary>
@@ -90,8 +144,7 @@ Real documents are messy: PDFs with multi-column layouts, tables, headers/footer
 - Measure **recall@k** on a labelled set after every change.
 
 </details>
-
-### 6. How do you build the prompt and get good citations?
+### 12. How do you build the prompt and get good citations?
 
 <details>
 <summary>Answer</summary>
@@ -103,8 +156,7 @@ Real documents are messy: PDFs with multi-column layouts, tables, headers/footer
 - Post-process: map chunk IDs to links; optionally verify each cited claim against its source.
 
 </details>
-
-### 7. How do you handle permissions in RAG?
+### 13. How do you handle permissions in RAG?
 
 <details>
 <summary>Answer</summary>
@@ -116,8 +168,7 @@ Users must only receive information from documents they're allowed to see.
 - Keep ACLs fresh (permission changes must propagate quickly) and also re-check at display time for sensitive sources.
 
 </details>
-
-### 8. How do you evaluate a RAG system?
+### 14. How do you evaluate a RAG system?
 
 <details>
 <summary>Answer</summary>
@@ -130,8 +181,7 @@ Evaluate the two halves separately and end to end:
 Tools: LLM-as-judge metrics (e.g. RAGAS-style faithfulness/context precision), human review of samples, and a **golden dataset** built from real user questions (including unanswerable ones). Re-run it on every change to chunking, embeddings, prompts or models.
 
 </details>
-
-### 9. What are the common failure modes of RAG?
+### 15. What are the common failure modes of RAG?
 
 <details>
 <summary>Answer</summary>
@@ -148,8 +198,7 @@ Tools: LLM-as-judge metrics (e.g. RAGAS-style faithfulness/context precision), h
 Debug by looking at the retrieved chunks for failing questions: most problems are retrieval problems.
 
 </details>
-
-### 10. What are advanced RAG patterns?
+### 16. What are advanced RAG patterns?
 
 <details>
 <summary>Answer</summary>
@@ -161,8 +210,16 @@ Debug by looking at the retrieved chunks for failing questions: most problems ar
 - **Structured RAG / text-to-SQL** – for numerical questions, query databases instead of text chunks.
 
 </details>
+### 17. What is agentic search, and when is it better than a vector index?
 
-### 11. RAG vs fine-tuning vs long context – when to use which?
+<details>
+<summary>Answer</summary>
+
+Instead of a single retrieve-then-answer step, the model **searches iteratively with tools** – grep, file listing, database queries, web search – reading results and refining queries until it has what it needs. Coding agents like Claude Code navigate codebases this way rather than with embeddings. Advantages: always up to date (no index to sync), precise for structured or exact-match data, handles multi-hop questions. Costs: more latency and tokens per question. Many systems combine both: vector/hybrid search as one tool among several.
+
+</details>
+
+### 18. RAG vs fine-tuning vs long context – when to use which?
 
 <details>
 <summary>Answer</summary>
@@ -178,8 +235,7 @@ Debug by looking at the retrieved chunks for failing questions: most problems ar
 They combine: a fine-tuned model that's better at using retrieved context, inside a RAG system. Fine-tuning is a poor way to add facts (it's expensive to update and the model can still hallucinate them).
 
 </details>
-
-### 12. How would you scale a RAG system to millions of documents and many users?
+### 19. How would you scale a RAG system to millions of documents and many users?
 
 <details>
 <summary>Answer</summary>
@@ -191,8 +247,7 @@ They combine: a fine-tuned model that's better at using retrieved context, insid
 - **Observability** – log retrieved chunks, scores, prompt versions, latency per stage and user feedback.
 
 </details>
-
-### 13. How do you make a RAG chatbot handle follow-up questions?
+### 20. How do you make a RAG chatbot handle follow-up questions?
 
 <details>
 <summary>Answer</summary>
@@ -200,8 +255,7 @@ They combine: a fine-tuned model that's better at using retrieved context, insid
 Use **conversational query rewriting**: before retrieval, an LLM call rewrites the latest message into a standalone query using the chat history ("And for the enterprise plan?" → "What is the refund policy for the enterprise plan?"). Pass a trimmed or summarised history to the answer model, and decide per turn whether retrieval is needed at all (small talk vs a knowledge question).
 
 </details>
-
-### 14. How do you handle tables, numbers and structured data in RAG?
+### 21. How do you handle tables, numbers and structured data in RAG?
 
 <details>
 <summary>Answer</summary>
@@ -209,8 +263,7 @@ Use **conversational query rewriting**: before retrieval, an LLM call rewrites t
 Text embeddings are weak at exact numbers and aggregation. Options: keep tables intact as markdown chunks with headers repeated; store structured data in a database and use **text-to-SQL** or tool calls for numeric questions ("total revenue in Q3"); summarise tables into descriptive text for retrieval while passing the raw table to the LLM; route questions by type (numeric → SQL, explanatory → document search).
 
 </details>
-
-### 15. What is a semantic cache, and what are its risks?
+### 22. What is a semantic cache, and what are its risks?
 
 <details>
 <summary>Answer</summary>
@@ -218,7 +271,17 @@ Text embeddings are weak at exact numbers and aggregation. Options: keep tables 
 A cache keyed by the **meaning** of a query: embed the new query and, if a previous query is similar enough (above a threshold), return its cached answer. Saves cost and latency for repeated questions (FAQs, support). Risks: returning an answer to a subtly different question (wrong threshold), stale answers after documents change (invalidate on updates), and **permission leaks** (cache per user/role or only for public content).
 
 </details>
+### 23. What does a vector database provide beyond an ANN library?
+
+<details>
+<summary>Answer</summary>
+
+Libraries (FAISS, hnswlib, ScaNN) give fast in-memory search. **Vector databases** (Pinecone, Weaviate, Milvus, Qdrant, Chroma, or extensions like **pgvector**, and search engines like Elasticsearch/OpenSearch) add: persistence, CRUD updates, **metadata storage and filtering**, hybrid keyword + vector search, horizontal scaling and replication, multi-tenancy, access control and backups.
+
+Choosing: pgvector if you already run Postgres and data fits (simple, transactional); a dedicated vector DB for very large scale or advanced features; Elasticsearch/OpenSearch if you need strong keyword search too.
+
+</details>
 
 ---
 
-[⬅ Previous: Embeddings & Vector Search](12-embeddings-vector-search.md) · [⬅ Back to index](../README.md) · [Next: Fine-Tuning & Alignment ➡](14-fine-tuning-alignment.md)
+[⬅ Previous: Model Context Protocol (MCP)](09-mcp.md) · [⬅ Back to index](../README.md) · [Next: Agents & Workflows ➡](11-agents-workflows.md)

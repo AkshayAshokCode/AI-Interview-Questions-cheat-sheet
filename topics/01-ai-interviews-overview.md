@@ -2,165 +2,128 @@
 
 [⬅ Back to index](../README.md)
 
-Covers: the different AI roles (ML engineer, AI/LLM engineer, data scientist, applied/research scientist, MLOps), what each interview loop contains, how rounds are scored, how to talk about your projects, and how to prepare.
+Covers: the roles that use AI (AI engineer, applied AI engineer, AI-native developer, solutions engineer), what each interview loop contains, how answers are scored, how to talk about AI projects, and a preparation plan.
 
 ---
 
-### 1. What are the main AI/ML roles, and how do their interviews differ?
+### 1. Which roles focus on using AI rather than building models, and what do they do?
 
 <details>
 <summary>Answer</summary>
 
 | Role | What they do | Interview emphasis |
 |---|---|---|
-| **ML Engineer** | Builds, trains, deploys and maintains models in production | ML fundamentals, coding (DSA + ML coding), ML system design, MLOps |
-| **AI / LLM Engineer** (GenAI engineer) | Builds products on top of foundation models: RAG, agents, fine-tuning, evaluation | LLM fundamentals, prompting, RAG, agents, evaluation, inference cost/latency, LLM system design, regular software engineering |
-| **Data Scientist** | Analyses data, experiments, builds models for decisions | Statistics, probability, SQL, A/B testing, ML basics, product sense |
-| **Applied Scientist** | Adapts research methods to product problems | Deep ML theory, modelling choices, papers, coding, ML design |
-| **Research Scientist** | Advances the state of the art | Deep learning theory, math, research depth, publications, implementing papers |
-| **MLOps / ML Platform Engineer** | Infrastructure for training, serving, monitoring | Distributed systems, Kubernetes, pipelines, GPUs, serving, observability |
+| **AI engineer / LLM application engineer** | Builds products on top of foundation models: prompts, RAG, tools, agents, evals | Prompting, context, tool use, RAG, agents, evals, guardrails, cost/latency, system design, solid software engineering |
+| **Applied AI / solutions engineer** | Helps customers or internal teams design and ship AI solutions | Use-case scoping, prompting, architecture choices, evals, communication |
+| **AI-native software engineer** (any engineering role today) | Uses AI coding assistants and agents daily to ship faster | Effective use of tools like Claude Code, reviewing AI output, testing, security |
+| **AI product manager** | Decides what AI features to build and how to measure them | AI capabilities and limits, UX, evaluation, risk, cost |
+| **Prompt / conversation designer** | Designs assistant behaviour, prompts and conversation flows | Prompt craft, evaluation, safety, tone |
 
-Read the job description carefully: "AI Engineer" at one company means LLM application work, at another it means ML engineering.
+These roles care about **how to get reliable, safe, cost-effective results from models** – not how to train them. (Model-building roles – ML engineers, research scientists – are a different track.)
 
 </details>
 
-### 2. What rounds does a typical ML/AI engineer loop include?
+### 2. What rounds does an AI engineer interview usually include?
 
 <details>
 <summary>Answer</summary>
 
-- **Coding (DSA)** – standard algorithm problems, usually in Python.
-- **ML coding** – implement something from scratch: logistic regression with gradient descent, k-means, attention, a metric, a data-processing step. See [ML Coding](22-ml-coding.md).
-- **ML fundamentals / breadth** – rapid questions across bias-variance, regularisation, metrics, trees, neural nets, transformers.
-- **ML / AI system design** – design a recommender, a fraud model, a RAG assistant, an LLM-powered feature end to end. See [ML & GenAI System Design](20-ml-genai-system-design.md).
-- **Domain depth** – NLP/LLMs, computer vision, recommendations, depending on the team.
-- **Project deep dive** – one of your past projects, in detail.
-- **Behavioral** – collaboration, ownership, ambiguity, failure.
-
-LLM-application roles add rounds on **prompting, RAG, agents and evaluation**, sometimes as a take-home ("build a small RAG app and evaluate it").
+- **Coding** – general software engineering, often practical (APIs, async code, data handling), sometimes with AI tools allowed.
+- **AI fundamentals** – rapid questions on tokens, context windows, temperature, hallucinations, prompting, RAG, tool use, evals.
+- **Build exercise / take-home** – e.g. build a small RAG or agent app with an evaluation set, then discuss trade-offs.
+- **AI system design** – design an AI feature end to end: model choice, prompts, retrieval, tools, guardrails, evals, cost and latency. See [AI System Design](20-ai-system-design.md).
+- **Scenarios** – "the chatbot hallucinates", "costs tripled", "the agent loops". See [Scenarios](21-scenario-based.md).
+- **Project deep dive** and **behavioral** – what you built, how you measured it, what went wrong.
 
 </details>
 
-### 3. How are AI interview answers scored?
+### 3. How are answers scored in AI-engineering interviews?
 
 <details>
 <summary>Answer</summary>
 
-Interviewers look for:
-- **Correct fundamentals** – you know *why* things work (why L1 gives sparsity, why attention is scaled by √d).
-- **Trade-off thinking** – accuracy vs latency vs cost; precision vs recall; RAG vs fine-tuning.
-- **Practicality** – data quality, baselines first, evaluation before optimisation, monitoring in production.
-- **Clear communication** – explain to a non-expert and to an expert.
-- **Honesty** – saying "I'm not sure, but I'd reason like this" beats bluffing; AI moves fast and nobody knows everything.
+- **Practical judgement** – choosing the simplest approach that works (a good prompt before RAG, RAG before fine-tuning, a workflow before an agent).
+- **Evaluation mindset** – every claim of "it works" is backed by an eval set and metrics.
+- **Reliability and safety** – handling hallucinations, prompt injection, failures, human oversight.
+- **Cost and latency awareness** – tokens, caching, model choice, streaming.
+- **Clear communication** – explaining limitations honestly to users and stakeholders.
+
+Naming frameworks or the newest model scores less than showing how you'd **measure and iterate**.
 
 </details>
 
-### 4. How should you approach an open-ended ML problem in an interview?
+### 4. How should you approach an open-ended "build an AI feature for X" question?
 
 <details>
 <summary>Answer</summary>
 
 ```mermaid
 flowchart TD
-    P["1. Clarify the business goal<br/>and success metric"] --> F["2. Frame as an ML task<br/>(classification, ranking, generation…)"]
-    F --> D["3. Data: sources, labels,<br/>quality, leakage, privacy"]
-    D --> B["4. Baseline<br/>(heuristic or simple model)"]
-    B --> M["5. Model + features<br/>iterate with offline metrics"]
-    M --> E["6. Evaluation<br/>offline → online A/B"]
-    E --> S["7. Serving + monitoring<br/>latency, drift, retraining"]
+    G["1. Goal + users + success metric"] --> F["2. Is AI the right tool?<br/>what to delegate, what stays human"]
+    F --> S["3. Simplest version: one prompt<br/>(+ examples, + context)"]
+    S --> E["4. Build a small eval set<br/>and measure"]
+    E --> A["5. Add only what's needed:<br/>retrieval, tools, workflow, agent"]
+    A --> GR["6. Guardrails + human oversight"]
+    GR --> C["7. Cost, latency, monitoring, rollout"]
 ```
 
-The most common mistake is jumping to "I'd use a transformer" before defining the metric, the data and a baseline.
+The most common mistake is jumping straight to "I'd build a multi-agent system" without a metric, an eval set or a baseline prompt.
 
 </details>
 
-### 5. How do you present an ML/AI project in a deep-dive round?
+### 5. How do you present an AI project in a deep-dive round?
 
 <details>
 <summary>Answer</summary>
 
-1. **Problem and impact** – the business goal and the metric that mattered.
-2. **Data** – where it came from, labelling, cleaning, biggest data problem.
-3. **Approach** – baseline, what you tried, why the final model; key features or prompts.
-4. **Evaluation** – offline metrics, how you avoided leakage, online results (A/B).
-5. **Production** – serving setup, latency, cost, monitoring, retraining.
-6. **What went wrong and what you learned.**
+1. **Problem and impact** – the user problem and the metric that mattered.
+2. **Approach** – the baseline prompt, what you added (retrieval, tools, workflow) and why.
+3. **Evaluation** – how you built the eval set, how you graded, key numbers before/after.
+4. **Failure modes** – hallucinations, edge cases, prompt injection – and how you handled them.
+5. **Production** – cost per request, latency, caching, monitoring, rollout.
+6. **What you'd do differently.**
 
-Expect follow-ups like "why not model X?", "how did you choose the threshold?", "how did you know it wasn't overfitting?". Only mention what you can defend.
+Expect follow-ups like "how did you know it was better?" and "what happens when the model is wrong?".
 
 </details>
 
-### 6. What's different about interviewing for GenAI / LLM roles?
+### 6. How much do you need to know about how models work internally?
 
 <details>
 <summary>Answer</summary>
 
-- Less emphasis on training models from scratch; more on **using foundation models well**: prompting, retrieval, tool use, fine-tuning when justified.
-- **Evaluation** is central: how do you know your LLM feature works and doesn't regress?
-- **Cost and latency** – tokens, caching, model choice, streaming.
-- **Safety** – hallucinations, prompt injection, data leakage, guardrails.
-- **Fast-moving knowledge** – interviewers often ask about recent models, techniques (reasoning models, MCP, agents) and your opinion on trade-offs. See [What's New](24-company-wise-whats-new.md).
-- Strong **software engineering** is expected: these are product-building roles.
+For AI-usage roles, enough to **predict behaviour and explain limitations**: tokens and context windows, next-token generation and sampling, why hallucinations happen, knowledge cutoffs, statelessness, what extended thinking does, and roughly how models are trained to follow instructions. You don't need to derive backpropagation or attention maths. See [How LLMs Work](02-how-llms-work.md).
 
 </details>
 
-### 7. How much math do you need for AI interviews?
+### 7. What are common mistakes in AI-engineering interviews?
 
 <details>
 <summary>Answer</summary>
 
-Depends on the role:
-- **AI/LLM engineer** – intuition-level linear algebra (vectors, dot products, cosine similarity, matrix multiplication), probability (softmax, sampling), and the basics of gradients.
-- **ML engineer / data scientist** – probability and statistics (Bayes, distributions, hypothesis testing), calculus for gradient descent and backprop, linear algebra (eigenvectors for PCA).
-- **Research / applied scientist** – rigorous derivations (MLE, backprop by hand, optimisation theory).
-
-See [Math & Statistics](02-math-statistics.md).
+- Over-engineering (agents and fine-tuning for problems a good prompt solves).
+- No evaluation plan ("I'd test it a bit").
+- Ignoring cost and latency, or prompt injection and data privacy.
+- Treating model output as correct without verification or human review where it matters.
+- Vague prompting advice ("be clear") without concrete techniques (examples, XML structure, output formats).
+- Not knowing the difference between workflows and agents, or RAG and fine-tuning.
 
 </details>
 
-### 8. Which programming skills are expected?
+### 8. How should you prepare in 2–4 weeks?
 
 <details>
 <summary>Answer</summary>
 
-- **Python** fluency: data structures, generators, typing, async for API-heavy LLM apps.
-- **NumPy / pandas** for data manipulation and vectorised code.
-- **PyTorch** (most common) or TensorFlow/JAX for model work: tensors, autograd, training loops, `Dataset`/`DataLoader`.
-- **SQL** for data roles.
-- Libraries for LLM work: model provider SDKs, Hugging Face Transformers, vector databases, evaluation tools.
-- Software engineering basics: testing, APIs, Docker, Git.
+1. **Week 1** – foundations and prompting: topics 02–06; practise rewriting weak prompts.
+2. **Week 2** – building: topics 07–11; build a small app with tool use and RAG.
+3. **Week 3** – quality and operations: topics 12–17; add an eval set, guardrails, caching; use an AI coding assistant on a real project.
+4. **Week 4** – topics 18–22, two mock AI system design interviews, and scenarios out loud.
 
-</details>
-
-### 9. What are common mistakes candidates make in AI interviews?
-
-<details>
-<summary>Answer</summary>
-
-- Using buzzwords without understanding (saying "attention" without being able to explain Q, K, V).
-- No baseline, no metric, no mention of data quality.
-- Ignoring data leakage, class imbalance or distribution shift.
-- Choosing accuracy as the metric for imbalanced problems.
-- Proposing fine-tuning when prompting or RAG would do (or the reverse).
-- Ignoring latency, cost and monitoring in system design.
-- Not knowing how to evaluate an LLM feature.
-
-</details>
-
-### 10. How should you prepare for an AI interview in 2–4 weeks?
-
-<details>
-<summary>Answer</summary>
-
-1. **Week 1** – fundamentals: topics 02–05 (math, ML basics, classical algorithms, metrics), plus daily coding practice.
-2. **Week 2** – deep learning and transformers: topics 06–09; implement attention and a small training loop yourself.
-3. **Week 3** – LLMs and GenAI: topics 10–18 (prompting, embeddings, RAG, fine-tuning, agents, evaluation, inference).
-4. **Week 4** – production and design: topics 19–21, ML coding (22), scenarios (23), company prep (24), plus two mock ML system design interviews.
-
-Build one small end-to-end project (e.g. a RAG app with an evaluation set) – it gives you concrete stories for every round.
+The Anthropic Academy courses (AI Fluency, Building with the Claude API, Introduction to MCP, Claude Code in Action) cover much of this hands-on.
 
 </details>
 
 ---
 
-[⬅ Back to index](../README.md) · [Next: Math & Statistics for ML ➡](02-math-statistics.md)
+[⬅ Back to index](../README.md) · [Next: How LLMs Work (For People Who Use Them) ➡](02-how-llms-work.md)
